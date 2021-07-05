@@ -2,6 +2,7 @@
 
 use Application\Atoms\Entity\_User;
 use Atomino\Bundle\Comment\CommenterInterface;
+use Atomino\Carbon\Attributes\HasMany;
 use Atomino\Carbon\Attributes\Modelify;
 use Atomino\Carbon\Attributes\Protect;
 use Atomino\Carbon\Attributes\Validator;
@@ -23,12 +24,11 @@ use Atomino\Carbon\Plugins\Updated\Updated;
 #[AttachmentCollection(field: 'avatar', maxCount: 1, maxSize: 512 * 1024, mimetype: "/image\/.*/")]
 #[Authenticable('email')]
 #[Authorizable('group', ['user', 'moderate', 'edit'])]
+#[HasMany('events', Event::class, 'organizerId')]
 class User extends _User {
-	const GROUPS = [
-		self::group__visitor   => [self::ROLE_USER],
-		self::group__moderator => [self::ROLE_USER, self::ROLE_MODERATE],
-		self::group__admin     => [self::ROLE_USER, self::ROLE_MODERATE, self::ROLE_EDIT],
-	];
+
+	const GROUPS = [];
+
 	public function jsonSerialize() {
 		$data = parent::jsonSerialize();
 		unset($data['password']);

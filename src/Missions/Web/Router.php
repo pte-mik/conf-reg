@@ -13,6 +13,7 @@ class Router extends \Atomino\Mercury\Router\Router {
 	public function route():void{
 		$this(method: 'GET', path: '/')?->pipe(Cache::class)->pipe(Page\Index::class);
 		$this(path: '/api/auth/**')?->pipe(Api\Authenticate::class);
+		$this(path: '/api/submission/**')?->pipe(Api\SubmissionApi::class);
 		$this()?->pipe(Page\Error404::class);
 	}
 	public function handle(Request $request): Response|null {

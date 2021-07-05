@@ -1,4 +1,5 @@
 import Abstracts from "./components/abstracts.svelte"
+import Abstract from "./components/abstract.svelte"
 import AbstractNew from "./components/abstract-new.svelte"
 import SignIn from "./components/sign-in.svelte";
 import SignUp from "./components/sign-up.svelte";
@@ -10,6 +11,7 @@ const routes = {
 	},
 	app: {
 		'/abstract/new': AbstractNew,
+		'/abstract/:id': Abstract,
 		'/': Abstracts,
 		'/*': Abstracts,
 	},

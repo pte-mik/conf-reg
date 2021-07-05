@@ -30,6 +30,7 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @property-read string|null $password
  * @method static \Atomino\Carbon\Database\Finder\Comparison updated($isin = null)
  * @property-read \DateTime|null $updated
+ * @property-read \Application\Atoms\EntityFinder\_Event $events
  */
 #[RequiredField('id', \Atomino\Carbon\Field\IntField::class)]
 #[Immutable("created", true)]

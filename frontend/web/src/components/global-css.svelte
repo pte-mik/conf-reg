@@ -1,11 +1,13 @@
 <script></script>
 <style lang="scss" global>
-	@import "@fortawesome/fontawesome-free/scss/variables";
-	$fa-font-path: "/~fonts/fontawesome-free";
-	@import "@fortawesome/fontawesome-free/scss/brands";
-	@import "@fortawesome/fontawesome-free/scss/regular";
-	@import "@fortawesome/fontawesome-free/scss/solid";
-	@import "@fortawesome/fontawesome-free/scss/fontawesome";
+	@import "@fortawesome/fontawesome-pro/scss/variables";
+	$fa-font-path: "/~fonts/fontawesome-pro";
+	@import "@fortawesome/fontawesome-pro/scss/brands";
+	@import "@fortawesome/fontawesome-pro/scss/regular";
+	@import "@fortawesome/fontawesome-pro/scss/solid";
+	@import "@fortawesome/fontawesome-pro/scss/light";
+	@import "@fortawesome/fontawesome-pro/scss/duotone";
+	@import "@fortawesome/fontawesome-pro/scss/fontawesome";
 	body {
 		background-image: url(https://i.pinimg.com/originals/53/aa/f6/53aaf6011bba6d6bb0499e1eef12c26d.jpg);
 		background-size: cover;

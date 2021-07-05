@@ -9,6 +9,7 @@
 	import Field from "svelma/src/components/Field.svelte"
 	import Input from "svelma/src/components/Input.svelte"
 	import Button from "svelma/src/components/Button.svelte"
+	import {replace} from "svelte-spa-router";
 
 	api.whoAmI();
 	function signOut() { api.signOut();}
@@ -24,10 +25,10 @@
 	<div id="navbarBasicExample" class="navbar-menu">
 		<div class="navbar-start">
 			<div class="buttons">
-				<Button iconPack="fas" iconLeft="users" size="is-small" rounded type="is-light" on:click={signOut}>{event.title}</Button>
+				<Button iconPack="fas" iconLeft="users" size="is-small" rounded type="is-light" on:click={()=>document.location.href = $event.website}>{$event.title}</Button>
 				{#if ($user)}
-					<Button iconPack="fas" iconLeft="user" size="is-small" rounded type="is-light" on:click={signOut}>My profile</Button>
-					<Button iconPack="fas" iconLeft="file-powerpoint" size="is-small" rounded type="is-light" on:click={signOut}>My abstracts</Button>
+					<Button iconPack="fas" iconLeft="user" size="is-small" rounded type="is-light" on:click={()=>replace('/profile')}>My profile</Button>
+					<Button iconPack="fas" iconLeft="file-powerpoint" size="is-small" rounded type="is-light" on:click={()=>replace('/abstracts')}>My abstracts</Button>
 				{/if}
 			</div>
 

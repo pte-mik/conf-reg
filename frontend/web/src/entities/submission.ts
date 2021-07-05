@@ -8,9 +8,10 @@
 // }
 
 
-export default interface Event{
+export default interface Submission{
 	title:string;
-	website:string;
-	deadline:string;
-	categories:Array<string>;
+	text:string;
+	category:string;
+	status:string;
+	authors:Array<any>;
 }
