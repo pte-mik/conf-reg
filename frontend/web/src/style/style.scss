@@ -1,0 +1,72 @@
+@import "@fortawesome/fontawesome-pro/scss/variables";
+$fa-font-path: "/~fonts/fontawesome-pro";
+@import "fortawesome/fontawesome-pro/scss/brands";
+@import "@fortawesome/fontawesome-pro/scss/light";
+@import "@fortawesome/fontawesome-pro/scss/regular";
+@import "@fortawesome/fontawesome-pro/scss/solid";
+@import "@fortawesome/fontawesome-pro/scss/duotone";
+@import "@fortawesome/fontawesome-pro/scss/fontawesome";
+
+//body {
+//	margin: 0;
+//	background-image: radial-gradient(#156395 20%, transparent 24%);
+//	background-color: #0E5684;
+//	background-position: 0 0, 12px 12px;
+//	background-size: 24px 24px;
+//	height: 100%;
+//	color: #555555;
+//}
+//* {
+//	font-family: "Baloo Chettan 2";
+//	outline: none;
+//	box-sizing: border-box;
+//}
+//html {
+//	height: 100%;
+//}
+//
+//a {
+//	cursor: pointer;
+//	color: #5BC0FF;
+//	font-weight: 500;
+//}
+//
+//.form {
+//	padding: 10px;
+//	p {
+//		margin: 10px 0;
+//		font-size: 12px;
+//	}
+//	p.error {
+//		color: orangered;
+//	}
+//	h1 {
+//		margin: 20px 0;
+//		font-size: 36px;
+//		font-weight: 500;
+//	}
+//	.input {
+//		margin: 10px auto;
+//		display: block;
+//		width: 280px;
+//		padding: 0 10px;
+//		line-height: 30px;
+//		border: 1px solid #eee;
+//		border-radius: 15px;
+//	}
+//
+//	.button {
+//		cursor: pointer;
+//		margin: 10px auto;
+//		display: block;
+//		width: 280px;
+//		padding: 0 10px;
+//		line-height: 30px;
+//		border: none;
+//		color: #ffffff;
+//		background-color: #5BC0FF;
+//		border-radius: 15px;
+//		font-size: 14px;
+//		font-weight: 500;
+//	}
+//}

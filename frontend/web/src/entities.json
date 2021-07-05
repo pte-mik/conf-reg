@@ -1,0 +1,36 @@
+{
+	"User": {
+		"id": "number",
+		"name": "string",
+		"email": "string",
+		"group": [
+			"admin",
+			"user"
+		],
+		"address": "string",
+		"phone": "string",
+		"institute": "string"
+	},
+	"Event": {
+		"id": "number",
+		"title": "string",
+		"subtitle": "string",
+		"name": "string"
+	},
+	"Presentation": {
+		"id": "number",
+		"eventId": "number",
+		"category": "string",
+		"imageCaption": "string",
+		"keywords": "Array<string>",
+		"abstract": "string",
+		"status": [
+			"draft",
+			"submitted",
+			"declined",
+			"accepted",
+			"modified"
+		],
+		"authors": "Array<any>"
+	}
+}
