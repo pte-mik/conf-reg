@@ -10,6 +10,7 @@
   "type": "module",
   "dependencies": {
     "@composi/gestures": "^1.0.9",
+    "@creativebulma/bulma-divider": "^1.1.0",
     "@fontsource/baloo-chettan-2": "^4.3.0",
     "@fortawesome/fontawesome-free": "^5.15.3",
     "@fortawesome/fontawesome-pro": "^5.15.3",

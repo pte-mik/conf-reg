@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "./global-css.svelte"
-	import Router from "svelte-spa-router";
+	import Router, {replace}from "svelte-spa-router";
 	import routes from "../routes.ts"
 	import {event, user} from "../stores.ts"
 	import api from "../services/api.ts";
@@ -9,7 +9,6 @@
 	import Field from "svelma/src/components/Field.svelte"
 	import Input from "svelma/src/components/Input.svelte"
 	import Button from "svelma/src/components/Button.svelte"
-	import {replace} from "svelte-spa-router";
 
 	api.whoAmI();
 	function signOut() { api.signOut();}
