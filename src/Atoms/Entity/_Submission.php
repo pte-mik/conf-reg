@@ -54,8 +54,8 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Field("keywords", \Atomino\Carbon\Field\JsonField::class)]
 #[Validator("log", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Field("log", \Atomino\Carbon\Field\JsonField::class)]
-#[Validator("status", \Symfony\Component\Validator\Constraints\Choice::class, ['multiple'=>false,'choices'=>['draft','submitted','declined','accepted','modified']])]
-#[Field("status", \Atomino\Carbon\Field\EnumField::class, ['draft','submitted','declined','accepted','modified'])]
+#[Validator("status", \Symfony\Component\Validator\Constraints\Choice::class, ['multiple'=>false,'choices'=>['draft','underReview','declined','accepted']])]
+#[Field("status", \Atomino\Carbon\Field\EnumField::class, ['draft','underReview','declined','accepted'])]
 #[Validator("text", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>65535])]
 #[Field("text", \Atomino\Carbon\Field\StringField::class)]
 #[Validator("title", \Symfony\Component\Validator\Constraints\NotNull::class)]
@@ -92,10 +92,9 @@ abstract class _Submission extends Entity {
 	const status = 'status';
 	public string|null $status = null;
 	const status__draft = 'draft';
-	const status__submitted = 'submitted';
+	const status__underReview = 'underReview';
 	const status__declined = 'declined';
 	const status__accepted = 'accepted';
-	const status__modified = 'modified';
 	const text = 'text';
 	public string|null $text = null;
 	const title = 'title';

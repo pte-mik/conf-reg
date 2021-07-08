@@ -17,6 +17,7 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @method static \Atomino\Carbon\Database\Finder\Comparison id($isin = null)
  * @property-read int|null $id
  * @method static \Atomino\Carbon\Database\Finder\Comparison organizerId($isin = null)
+ * @method static \Atomino\Carbon\Database\Finder\Comparison regOpening($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison title($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison url($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison website($isin = null)
@@ -31,6 +32,7 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Validator("organizerId", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("organizerId", \Symfony\Component\Validator\Constraints\PositiveOrZero::class)]
 #[Field("organizerId", \Atomino\Carbon\Field\IntField::class)]
+#[Field("regOpening", \Atomino\Carbon\Field\DateField::class)]
 #[Validator("title", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("title", \Atomino\Carbon\Field\StringField::class)]
 #[Validator("url", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
@@ -48,6 +50,8 @@ abstract class _Event extends Entity {
 	protected function getId():int|null{ return $this->id;}
 	const organizerId = 'organizerId';
 	public int|null $organizerId = null;
+	const regOpening = 'regOpening';
+	public \DateTime|null $regOpening = null;
 	const title = 'title';
 	public string|null $title = null;
 	const url = 'url';

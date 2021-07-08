@@ -33,6 +33,7 @@ class SubmissionApi extends Api {
 		$submission->title = $this->data->get("title");
 		$submission->category = $this->data->get("category");
 		$submission->authors = $this->data->get("authors");
+		$submission->keywords = $this->data->get("keywords");
 		$submission->status = Submission::status__draft;
 		try {
 			$submission->save();

@@ -8,10 +8,14 @@
 // }
 
 
+import type Author from "./author";
+
 export default interface Submission{
 	title:string;
 	text:string;
 	category:string;
 	status:string;
-	authors:Array<any>;
+	authors:Array<Author>;
+	keywords: Array<string>;
 }
+

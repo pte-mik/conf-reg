@@ -11,6 +11,7 @@
 	import type Submission from "../entities/submission.ts";
 	import handleFetch from "../services/handle-fetch.ts";
 	import {event} from "../stores.ts";
+	import type Author from "../entities/author.ts";
 
 	import {createEventDispatcher} from 'svelte';
 
@@ -20,7 +21,7 @@
 	function deleteAuthor() { dispatch('deleteAuthor');}
 
 	export let index;
-	export let author;
+	export let author: Author;
 	$: displayname = ((first, last) => {
 		first = first.replace(/\s\s+/g, ' ').trim();
 		let firstname = first.split(' ')
@@ -36,23 +37,31 @@
 </script>
 <div class="card-content has-text-white has-background-grey-dark is-paddingless mb-4 is-vcentered">
 	<div class="columns is-variable is-1  mb-0 p-0 px-4">
-		<div class="column pt-3 pb-1 is-size-7">{index + 1}. <span class=" has-text-weight-bold"> {displayname}</span></div>
+		<div class="column pt-3 pb-1 is-size-7">
+			<Tooltip label="You can drag and drop the authors" type="is-dark" rounded>
+				<Icon pack="fas" type="is-warning" icon="grip-vertical"/>
+			</Tooltip>
+			<span class=" has-text-weight-bold"> {displayname}</span></div>
 		<div class="column py-2 has-text-right">
 			<Field class="is-pulled-right">
 				<div class="control">
-					<Button type={author.presenter ? "is-success" : "is-dark"} size="is-small" on:click={changePresenter}>
-						<Icon pack="fas" icon="comment-alt-smile"/>
-					</Button>
+					<Tooltip label="Presenter" rounded>
+						<Button type={author.presenter ? "is-success" : "is-dark"} size="is-small" on:click={changePresenter}>
+							<Icon pack="fas" icon="comment-alt-smile"/>
+						</Button>
+					</Tooltip>
 				</div>
 				<div class="control">
-					<Button type="is-danger" size="is-small" on:click={deleteAuthor}>
-						<Icon pack="fas" icon="times"/>
-					</Button>
+					<Tooltip label="Remove author" type="is-danger" rounded>
+						<Button type="is-danger" size="is-small" on:click={deleteAuthor}>
+							<Icon pack="fas" icon="times"/>
+						</Button>
+					</Tooltip>
 				</div>
 			</Field>
-<!--			<Tooltip label="presenter" position="is-left">-->
-<!--				<Switch size="is-small" bind:checked={author.presenter} on:click={(e)=>changePresenter(e)}/>-->
-<!--			</Tooltip>-->
+			<!--			<Tooltip label="presenter" position="is-left">-->
+			<!--				<Switch size="is-small" bind:checked={author.presenter} on:click={(e)=>changePresenter(e)}/>-->
+			<!--			</Tooltip>-->
 		</div>
 	</div>
 </div>

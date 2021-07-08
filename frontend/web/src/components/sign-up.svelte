@@ -9,6 +9,7 @@
 	import Button from "svelma/src/components/Button.svelte"
 
 	let name: string = '';
+	$: name_input_message = name.length > 3 ? "" : "required"
 	let email: string = '';
 	let password: string = '';
 	let phone: string = '';
@@ -17,6 +18,16 @@
 	let institute: string = '';
 	let city: string = '';
 	let zip: string = '';
+	let vat: string = '';
+
+	function validateEmail(email) {
+		const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		return re.test(String(email).toLowerCase());
+	}
+	function validatePassword(password) {
+		const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8})/;
+		return re.test(password);
+	}
 
 	function signUp() {
 		api.signUp(name, email, password, phone, country, city, zip, address, institute)
@@ -40,31 +51,37 @@
 		<div class="card-content has-background-white-bis is-clearfix">
 			<div class="columns">
 				<div class="column">
-					<Field label="name">
+					<div class="divider">Account</div>
+					<Field label="name" message={name.length > 3 ? "" : "required (must be at least 4 characters long)"}>
 						<Input bind:value={name}/>
 					</Field>
-					<Field label="institute">
-						<Input bind:value={institute}/>
-					</Field>
-					<Field label="e-mail">
+
+					<Field label="e-mail" message={validateEmail(email) ? "" : "must be a valid email address"}>
 						<Input type="email" bind:value={email}/>
 					</Field>
-					<Field label="password">
+					<Field label="password" message={validatePassword(password) ? "": "must be at least 8 characters long, must contain letters in mixed case and must contain numbers"}>
 						<Input type="password" bind:value={password} passwordReveal={true}/>
 					</Field>
-				</div>
-				<div class="column">
 					<Field label="phone">
 						<Input bind:value={phone}/>
 					</Field>
-					<Field label="country">
+				</div>
+				<div class="column">
+					<div class="divider">Billing information</div>
+					<Field label="institute" message={institute.length > 3 ? "" : "required (must be at least 4 characters long)"}>
+						<Input bind:value={institute}/>
+					</Field>
+					<Field label="country" message={country.length > 3 ? "" : "required (must be at least 4 characters long)"}>
 						<Input bind:value={country}/>
 					</Field>
-					<Field label="zip">
+					<Field label="zip" message={zip.length > 3 ? "" : "required (must be at least 4 characters long)"}>
 						<Input bind:value={zip}/>
 					</Field>
-					<Field label="address">
+					<Field label="address" message={address.length > 3 ? "" : "required (must be at least 4 characters long)"}>
 						<Input bind:value={address}/>
+					</Field>
+					<Field label="vat" message={vat.length > 3 ? "" : "required (must be at least 4 characters long)"}>
+						<Input bind:value={vat}/>
 					</Field>
 				</div>
 			</div>
