@@ -8,7 +8,7 @@ function post(url: string, data: any) {
 
 class Api {
 	public whoAmI() { return fetch('/api/auth').then(res => res.json()).then(data => user.update(() => data));}
-	public signUp(name: string, email: string, password: string) { return post('/api/auth/sign-up', {name, email, password});}
+	public signUp(name: string, email: string, password: string, phone: string) { return post('/api/auth/sign-up', {name, email, password, phone});}
 	public signIn(email: string, password: string) { return post('/api/auth/sign-in', {email, password});}
 	public signOut() { return fetch('/api/auth/sign-out').then(res => this.whoAmI())}
 	public forgotPassword(email: string) { return post('/api/auth/forgot-password', {email});}

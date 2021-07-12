@@ -30,7 +30,7 @@
 	}
 
 	function signUp() {
-		api.signUp(name, email, password, phone, country, city, zip, address, institute)
+		api.signUp(name, email, password, phone)
 			.then(handleFetch)
 			.then(res => {
 				toast.success('Account created');
@@ -43,7 +43,7 @@
 
 
 <div class="columns is-centered">
-	<div class="form column is-two-thirds card is-paddingless has-background-black-ter">
+	<div class="form column is-one-third card is-paddingless has-background-black-ter">
 		<div class="card-content has-text-white">
 			<h1 class="is-size-5 has-text-weight-bold">Sign up</h1>
 			<p class="is-size-7">Already have an account? <a class="has-text-primary" href on:click|preventDefault={()=>replace('/sign-in')}>Sign in</a></p>
@@ -51,7 +51,7 @@
 		<div class="card-content has-background-white-bis is-clearfix">
 			<div class="columns">
 				<div class="column">
-					<div class="divider">Account</div>
+<!--					<div class="divider">Account</div>-->
 					<Field label="name" message={name.length > 3 ? "" : "required (must be at least 4 characters long)"}>
 						<Input bind:value={name}/>
 					</Field>
@@ -66,24 +66,24 @@
 						<Input bind:value={phone}/>
 					</Field>
 				</div>
-				<div class="column">
-					<div class="divider">Billing information</div>
-					<Field label="institute" message={institute.length > 3 ? "" : "required (must be at least 4 characters long)"}>
-						<Input bind:value={institute}/>
-					</Field>
-					<Field label="country" message={country.length > 3 ? "" : "required (must be at least 4 characters long)"}>
-						<Input bind:value={country}/>
-					</Field>
-					<Field label="zip" message={zip.length > 3 ? "" : "required (must be at least 4 characters long)"}>
-						<Input bind:value={zip}/>
-					</Field>
-					<Field label="address" message={address.length > 3 ? "" : "required (must be at least 4 characters long)"}>
-						<Input bind:value={address}/>
-					</Field>
-					<Field label="vat" message={vat.length > 3 ? "" : "required (must be at least 4 characters long)"}>
-						<Input bind:value={vat}/>
-					</Field>
-				</div>
+<!--				<div class="column">-->
+<!--					<div class="divider">Billing information</div>-->
+<!--					<Field label="institute" message={institute.length > 3 ? "" : "required (must be at least 4 characters long)"}>-->
+<!--						<Input bind:value={institute}/>-->
+<!--					</Field>-->
+<!--					<Field label="country" message={country.length > 3 ? "" : "required (must be at least 4 characters long)"}>-->
+<!--						<Input bind:value={country}/>-->
+<!--					</Field>-->
+<!--					<Field label="zip" message={zip.length > 3 ? "" : "required (must be at least 4 characters long)"}>-->
+<!--						<Input bind:value={zip}/>-->
+<!--					</Field>-->
+<!--					<Field label="address" message={address.length > 3 ? "" : "required (must be at least 4 characters long)"}>-->
+<!--						<Input bind:value={address}/>-->
+<!--					</Field>-->
+<!--					<Field label="vat" message={vat.length > 3 ? "" : "required (must be at least 4 characters long)"}>-->
+<!--						<Input bind:value={vat}/>-->
+<!--					</Field>-->
+<!--				</div>-->
 			</div>
 
 

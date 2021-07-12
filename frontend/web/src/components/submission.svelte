@@ -31,19 +31,19 @@
 		.then(res => submission = res)
 		.catch(e => replace('/'))
 
-	function removeKeyword(index){
-		submission.keywords.splice(index,1);
+	function removeKeyword(index) {
+		submission.keywords.splice(index, 1);
 		submission.keywords = [...new Set(submission.keywords)];
 	}
 
-	function addKeyword(keyword){
+	function addKeyword(keyword) {
 		keyword = keyword.trim().toLocaleUpperCase();
-		if(keyword.length === 0) return;
-		if(keyword.length < 3){
+		if (keyword.length === 0) return;
+		if (keyword.length < 3) {
 			toast.danger("Keyword must be at least 3 characters long")
-		}else{
-		submission.keywords.push(keyword);
-		submission.keywords = [...new Set(submission.keywords)];
+		} else {
+			submission.keywords.push(keyword);
+			submission.keywords = [...new Set(submission.keywords)];
 		}
 	}
 
@@ -99,17 +99,33 @@
 						<Tag type="is-info" closable on:close={()=>{removeKeyword(index)}}>{keyword}</Tag>
 					{/each}
 				</Taglist>
-				<Input icon="plus" on:keypress = {e => {if (e.charCode === 13){ addKeyword(e.target.value); e.target.value = ''}}}/>
+				<Input icon="plus" on:keypress={e => {if (e.charCode === 13){ addKeyword(e.target.value); e.target.value = ''}}}/>
 
 				<div class="divider">Authors</div>
 				<Authors bind:authors={submission.authors}/>
 
 			</div>
 			<div class="card-content has-text-white has-text-centered">
-				<Button iconPack="fas" iconLeft="times" class="is-danger" loading={loading} on:click={deleteSubmission}>Delete</Button>
-				<Button iconPack="fad" iconLeft="eye" class="is-info" loading={loading} on:click={preview}>Preview</Button>
-				<Button iconPack="fad" iconLeft="save" class="is-info" loading={loading} on:click={submitToReview}>Submit to review</Button>
-				<Button iconPack="fas" iconLeft="save" class="is-primary" loading={loading} on:click={save}>Save changes</Button>
+				<Tooltip label="delete" type="is-danger">
+					<Button class="is-danger" loading={loading} on:click={deleteSubmission}>
+						<Icon pack="fas" icon="times"/>
+					</Button>
+				</Tooltip>
+				<Tooltip label="show preview" type="is-white">
+					<Button class="is-white" loading={loading} on:click={preview}>
+						<Icon pack="fad" icon="eye"/>
+					</Button>
+				</Tooltip>
+				<Tooltip label="submit to review" type="is-info">
+					<Button class="is-info" loading={loading} on:click={submitToReview}>
+						<Icon pack="fad" icon="envelope-open-text"/>
+					</Button>
+				</Tooltip>
+				<Tooltip label="save changes" type="is-primary">
+					<Button class="is-primary" loading={loading} on:click={save}>
+						<Icon pack="fas" icon="save"/>
+					</Button>
+				</Tooltip>
 			</div>
 		</div>
 	</div>

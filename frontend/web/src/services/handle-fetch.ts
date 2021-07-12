@@ -13,6 +13,9 @@ export default function handleFetch(res: Response) {
 		case 404:
 			toast.danger('Item not found');
 			throw {code: 404}
+		case 429:
+			toast.danger('Too Many Requests! Please wait!');
+			throw {code: 429}
 		case 422:
 			return res.json().then((messages:Array<Message>) => {
 				let output:any = {};

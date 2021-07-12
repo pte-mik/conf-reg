@@ -5,23 +5,14 @@
 	import Field from "svelma/src/components/Field.svelte"
 	import Input from "svelma/src/components/Input.svelte"
 	import Button from "svelma/src/components/Button.svelte"
+	import handleFetch from "../services/handle-fetch.ts";
 
 	let email: string = "";
 	let password: string = "";
 
 	function signIn() {
 		api.signIn(email, password)
-			.then(res => {
-				if (res.status === 401) {
-					toast.danger('Authentication error<div class="is-size-7">The e-mail or password you entered does not match our records.</div>')
-					throw {code: res.status};
-				}
-				if (res.status === 403) {
-
-					toast.danger('Authorization error<div class="is-size-7">You don\'t have permission for the requested resource</div>')
-					throw {code: res.status};
-				}
-			})
+			.then(handleFetch)
 			.then(res => {
 				api.whoAmI();
 				toast.success('Authentication Successfull');

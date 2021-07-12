@@ -16,8 +16,8 @@
 
 <nav class="navbar is-transparent mt-0 mb-6" role="navigation" aria-label="main navigation" style="background-color: rgba(0,0,0,.6)">
 	<div class="navbar-brand">
-		<a class="navbar-item">
-			<i class="fas fa-font mr-3 has-text-danger"/>
+		<a class="navbar-item has-text-weight-bold has-text-white">
+			<i class="fas fa-user-ninja mr-3"/> Conference ninja
 		</a>
 	</div>
 

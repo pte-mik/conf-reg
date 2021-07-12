@@ -28,6 +28,7 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @property string|null $name
  * @method static \Atomino\Carbon\Database\Finder\Comparison password($isin = null)
  * @property-read string|null $password
+ * @method static \Atomino\Carbon\Database\Finder\Comparison phone($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison updated($isin = null)
  * @property-read \DateTime|null $updated
  * @property-read \Application\Atoms\EntityFinder\_Event $events
@@ -59,6 +60,8 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Field("name", \Atomino\Carbon\Field\StringField::class)]
 #[Validator("password", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>128])]
 #[Field("password", \Atomino\Carbon\Field\StringField::class)]
+#[Validator("phone", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
+#[Field("phone", \Atomino\Carbon\Field\StringField::class)]
 #[Field("updated", \Atomino\Carbon\Field\DateTimeField::class)]
 abstract class _User extends Entity implements \Atomino\Bundle\Attachment\AttachmentableInterface, \Atomino\Bundle\Authenticate\AuthenticableInterface, \Atomino\Bundle\Authorize\AuthorizableInterface{
 	static null|Model $model = null;
@@ -96,6 +99,8 @@ abstract class _User extends Entity implements \Atomino\Bundle\Attachment\Attach
 	const password = 'password';
 	protected string|null $password = null;
 	protected function getPassword():string|null{ return $this->password;}
+	const phone = 'phone';
+	public string|null $phone = null;
 	const updated = 'updated';
 	protected \DateTime|null $updated = null;
 	protected function getUpdated():\DateTime|null{ return $this->updated;}

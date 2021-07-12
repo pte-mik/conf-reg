@@ -35,35 +35,27 @@
 
 
 </script>
-<div class="card-content has-text-white has-background-grey-dark is-paddingless mb-4 is-vcentered">
-	<div class="columns is-variable is-1  mb-0 p-0 px-4">
-		<div class="column pt-3 pb-1 is-size-7">
-			<Tooltip label="You can drag and drop the authors" type="is-dark" rounded>
-				<Icon pack="fas" type="is-warning" icon="grip-vertical"/>
+<div class="card-content has-text-white has-background-grey-dark p-3 mb-4 is-vcentered is-clearfix">
+	<Tooltip label="You can drag and drop the authors" type="is-dark" rounded>
+		<Icon pack="fas" type="is-warning" icon="grip-vertical"/>
+	</Tooltip>
+	<span class=" has-text-weight-bold"> {displayname}</span>
+	<Field class="is-pulled-right">
+		<div class="control">
+			<Tooltip label="Presenter" rounded>
+				<Button type={author.presenter ? "is-success" : "is-dark"} size="is-small" on:click={changePresenter}>
+					<Icon pack="fas" icon="comment-alt-smile"/>
+				</Button>
 			</Tooltip>
-			<span class=" has-text-weight-bold"> {displayname}</span></div>
-		<div class="column py-2 has-text-right">
-			<Field class="is-pulled-right">
-				<div class="control">
-					<Tooltip label="Presenter" rounded>
-						<Button type={author.presenter ? "is-success" : "is-dark"} size="is-small" on:click={changePresenter}>
-							<Icon pack="fas" icon="comment-alt-smile"/>
-						</Button>
-					</Tooltip>
-				</div>
-				<div class="control">
-					<Tooltip label="Remove author" type="is-danger" rounded>
-						<Button type="is-danger" size="is-small" on:click={deleteAuthor}>
-							<Icon pack="fas" icon="times"/>
-						</Button>
-					</Tooltip>
-				</div>
-			</Field>
-			<!--			<Tooltip label="presenter" position="is-left">-->
-			<!--				<Switch size="is-small" bind:checked={author.presenter} on:click={(e)=>changePresenter(e)}/>-->
-			<!--			</Tooltip>-->
 		</div>
-	</div>
+		<div class="control">
+			<Tooltip label="Remove author" type="is-danger" rounded>
+				<Button type="is-danger" size="is-small" on:click={deleteAuthor}>
+					<Icon pack="fas" icon="times"/>
+				</Button>
+			</Tooltip>
+		</div>
+	</Field>
 </div>
 <div class="columns is-variable is-1 is-vcentered mb-0 pr-4">
 	<div class="column is-1 has-text-centered">

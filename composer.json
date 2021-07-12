@@ -29,7 +29,8 @@
         "ext-gd": "*",
         "ext-curl": "*",
         "ext-readline": "*",
-        "ext-sockets": "*"
+        "ext-sockets": "*",
+        "symfony/rate-limiter": "^5.3"
     },
     "autoload": {
         "psr-4": {

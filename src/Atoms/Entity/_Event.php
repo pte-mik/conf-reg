@@ -17,6 +17,7 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @method static \Atomino\Carbon\Database\Finder\Comparison id($isin = null)
  * @property-read int|null $id
  * @method static \Atomino\Carbon\Database\Finder\Comparison organizerId($isin = null)
+ * @method static \Atomino\Carbon\Database\Finder\Comparison participationRequired($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison regOpening($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison title($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison url($isin = null)
@@ -24,7 +25,9 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @property-read \Application\Entity\User $organizer
  */
 #[RequiredField('id', \Atomino\Carbon\Field\IntField::class)]
+#[Validator("categories", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Field("categories", \Atomino\Carbon\Field\JsonField::class)]
+#[Validator("deadline", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Field("deadline", \Atomino\Carbon\Field\DateField::class)]
 #[Field("id", \Atomino\Carbon\Field\IntField::class)]
 #[Protect("id", true, false)]
@@ -32,11 +35,17 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Validator("organizerId", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("organizerId", \Symfony\Component\Validator\Constraints\PositiveOrZero::class)]
 #[Field("organizerId", \Atomino\Carbon\Field\IntField::class)]
+#[Validator("participationRequired", \Symfony\Component\Validator\Constraints\NotNull::class)]
+#[Field("participationRequired", \Atomino\Carbon\Field\BoolField::class)]
+#[Validator("regOpening", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Field("regOpening", \Atomino\Carbon\Field\DateField::class)]
+#[Validator("title", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("title", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("title", \Atomino\Carbon\Field\StringField::class)]
+#[Validator("url", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("url", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("url", \Atomino\Carbon\Field\StringField::class)]
+#[Validator("website", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("website", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("website", \Atomino\Carbon\Field\StringField::class)]
 abstract class _Event extends Entity {
@@ -50,6 +59,8 @@ abstract class _Event extends Entity {
 	protected function getId():int|null{ return $this->id;}
 	const organizerId = 'organizerId';
 	public int|null $organizerId = null;
+	const participationRequired = 'participationRequired';
+	public bool|null $participationRequired = null;
 	const regOpening = 'regOpening';
 	public \DateTime|null $regOpening = null;
 	const title = 'title';
