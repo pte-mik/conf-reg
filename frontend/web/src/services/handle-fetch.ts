@@ -1,4 +1,4 @@
-import toast from "../elements/toast";
+import toast from "src/services/toast";
 
 export default function handleFetch(res: Response) {
 	switch (res.status) {
@@ -19,8 +19,10 @@ export default function handleFetch(res: Response) {
 		case 422:
 			return res.json().then((messages:Array<Message>) => {
 				let output:any = {};
-				for (let message of messages) output[message.field] = message.message;
-				for (let field in output) if(output.hasOwnProperty(field)) toast.danger('Validation error: ' + field + '<div class="is-size-7">'+ output[field] +'</div>');
+				for (let message of messages){
+					if(message.hasOwnProperty('field') && message.field) toast.danger('Validation error: ' + message.field + '<br>'+message.message );
+					else toast.danger(message.message);
+				}
 				throw {code: 422, messages: output}
 			});
 		default:

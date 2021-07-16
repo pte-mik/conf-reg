@@ -1,12 +1,11 @@
 <script lang="ts">
-	import AuthorTag from "./author.svelte";
+	import AuthorTag from "src/components/presentation/author.svelte";
 	import Button from "svelma/src/components/Button.svelte"
-	import {event} from "../stores.ts";
-	import {flip} from 'svelte/animate';
-	import type Author from "../entities/author.ts";
+	import {event} from "src/services/stores.ts";
+	import type Author from "src/entities/author.ts";
 
 
-	export let authors:Array<Author>;
+	export let authors: Array<Author>;
 
 	function changePresenter(index) {
 		for (let author of authors) author.presenter = false;
@@ -39,12 +38,8 @@
 	}
 
 	function deleteAuthor(index) {
-		if (confirm('Are you sure?')) {
-			let author = authors.splice(index, 1)[0];
-			if (author.presenter && authors.length > 0) {
-				authors[0].presenter = true;
-			}
-		}
+		let author = authors.splice(index, 1)[0];
+		if (author.presenter && authors.length > 0) authors[0].presenter = true;
 		authors = [...authors]
 	}
 </script>
@@ -54,8 +49,8 @@
 		 on:dragstart={event => dragstart(event, index)}
 		 on:drop|preventDefault={event => drop(event, index)}
 		 ondragover="return false">
-		<div >
-			<AuthorTag author={author} index={index} on:deleteAuthor={()=>deleteAuthor(index)} on:changePresenter={()=>changePresenter(index)}/>
+		<div>
+			<AuthorTag author={author} index={index} onDeleteAuthor={deleteAuthor} onChangePresenter={changePresenter}/>
 		</div>
 	</div>
 {/each}

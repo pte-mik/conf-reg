@@ -12,6 +12,7 @@ use Atomino\Carbon\Attributes\RequiredField;
 
 /**
  * @method static \Application\Atoms\EntityFinder\_Submission search( Filter $filter = null )
+ * @property-read \Atomino\Bundle\Attachment\Collection $image
  * @method static \Atomino\Carbon\Database\Finder\Comparison attachments($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison authors($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison category($isin = null)
@@ -33,6 +34,9 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @property-read \Application\Entity\Event $event
  */
 #[RequiredField('id', \Atomino\Carbon\Field\IntField::class)]
+#[Immutable( 'attachments', true )]
+#[Protect( 'attachments', false, false )]
+#[RequiredField( 'attachments', \Atomino\Carbon\Field\JsonField::class )]
 #[Immutable("created", true)]
 #[Protect("created", true, false)]
 #[RequiredField("created", \Atomino\Carbon\Field\DateTimeField::class)]
@@ -65,12 +69,14 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Field("updated", \Atomino\Carbon\Field\DateTimeField::class)]
 #[Validator("userId", \Symfony\Component\Validator\Constraints\PositiveOrZero::class)]
 #[Field("userId", \Atomino\Carbon\Field\IntField::class)]
-abstract class _Submission extends Entity {
+abstract class _Submission extends Entity implements \Atomino\Bundle\Attachment\AttachmentableInterface{
 	static null|Model $model = null;
+	use \Atomino\Carbon\Plugins\Attachment\AttachmentableTrait;
+	protected final function __getImage(){return $this->getAttachmentCollection("image");}
 	use \Atomino\Carbon\Plugins\Created\CreatedTrait;
 	use \Atomino\Carbon\Plugins\Updated\UpdatedTrait;
 	const attachments = 'attachments';
-	public array $attachments = [];
+	protected array $attachments = [];
 	const authors = 'authors';
 	public array $authors = [];
 	const category = 'category';

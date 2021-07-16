@@ -6,6 +6,6 @@ use Application\Atoms\Entity\_Event;
 
 #[Modelify(\Application\Database\DefaultConnection::class, 'event', true)]
 #[BelongsTo('organizer', User::class, 'organizerId')]
-class Event extends _Event{
-
+class Event extends _Event {
+	public function isOrganizer(User $user): bool { return $this->organizerId === $user->id; }
 }

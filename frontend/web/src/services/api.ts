@@ -1,4 +1,5 @@
-import {user} from "../stores";
+import handleFetch from "src/services/handle-fetch";
+import {user} from "src/services/stores";
 import User from "../entities/user";
 import type Submission from "../entities/submission";
 
@@ -12,10 +13,26 @@ class Api {
 	public signIn(email: string, password: string) { return post('/api/auth/sign-in', {email, password});}
 	public signOut() { return fetch('/api/auth/sign-out').then(res => this.whoAmI())}
 	public forgotPassword(email: string) { return post('/api/auth/forgot-password', {email});}
-	public newAbstract(title: string, category: string) { return post('/api/submission/create', {title, category});}
-	public getAbstracts() { return fetch('/api/submission/get').then(res => res.json())}
-	public getAbstract(id: number) { return fetch('/api/submission/get/' + id)}
-	public saveAbstract(abstract: Submission) { return post('/api/submission/', abstract)}
+
+	public submission = {
+		collect: () => fetch('/api/submission/get').then(res => res.json()),
+		get: (id: number) => fetch('/api/submission/get/' + id),
+		save: (submission: Submission) => post('/api/submission/', submission),
+		create: (title: string, category: string) => post('/api/submission/create', {title, category}),
+		image: {
+			add: (id: number, file: File) => {
+				let data = new FormData()
+				data.append('file', file)
+				return fetch('/api/submission/' + id + '/image', {
+					method: 'POST',
+					body: data
+				}).then(handleFetch);
+			},
+			remove: (id: number) => {
+				return fetch('/api/submission/' + id + '/image', {method: 'DELETE'});
+			}
+		}
+	}
 }
 
 let api: Api = new Api();

@@ -1,10 +1,12 @@
 import fs from "fs";
 import svelte from 'rollup-plugin-svelte';
 import commonjs from '@rollup/plugin-commonjs';
+import alias from '@rollup/plugin-alias';
 import resolve from '@rollup/plugin-node-resolve';
 import {terser} from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
-import typescript from "rollup-plugin-typescript2";
+//import typescript from "rollup-plugin-typescript2";
+import typescript from "@rollup/plugin-typescript";
 import css from 'rollup-plugin-css-only';
 import json from "@rollup/plugin-json";
 import styles from 'rollup-plugin-styles';
@@ -16,8 +18,9 @@ let env = {
 	css: 'index.css',
 	path: {
 		versionfile: process.cwd() + '/../../var/etc/version',
-		out: production ? process.cwd() + '/../../assets/public/~web': process.cwd() + '/../../var/public/~web',
+		out: production ? process.cwd() + '/../../assets/public/~web' : process.cwd() + '/../../var/public/~web',
 		entry: process.cwd() + '/src/index.ts',
+		fonts: process.cwd() + '/../../assets/public/~fonts'
 	}
 }
 
@@ -37,10 +40,17 @@ let rollup = {
 			input,
 			output: {sourcemap: true, format: 'iife', name: 'app', file: outPath + '/' + outJS},
 			plugins: [
-				styles({mode:'emit'}),
-				typescript({check: false}),
+				styles({mode: 'emit', url: false}),
+				//typescript({check: false}),
+				typescript(),
+				alias({
+					entries: [
+						{find: 'src', replacement: process.cwd() + '/src'}
+					]
+				}),
 				json(),
 				svelte({
+					extensions: [".svelte"],
 					emitCss: true,
 					preprocess: sveltePreprocess({sourceMap: !production}),
 					compilerOptions: {
@@ -49,7 +59,10 @@ let rollup = {
 					}
 				}),
 				css({output: outCSS}),
-				resolve(),
+				resolve({
+					module: false, // <-- this library is not an ES6 module
+					browser: true, // <-- suppress node-specific features
+				}),
 				commonjs(),
 				this.verbump(versionFile),
 				production && terser()
@@ -59,5 +72,4 @@ let rollup = {
 }
 
 
-
-export default rollup.compiler(env.path.entry, env.path.out, env.js, env.css,env.path.versionfile,  production);
+export default rollup.compiler(env.path.entry, env.path.out, env.js, env.css, env.path.versionfile, production);

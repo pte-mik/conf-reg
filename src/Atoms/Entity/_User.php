@@ -25,7 +25,6 @@ use Atomino\Carbon\Attributes\RequiredField;
  * @method static \Atomino\Carbon\Database\Finder\Comparison id($isin = null)
  * @property-read int|null $id
  * @method static \Atomino\Carbon\Database\Finder\Comparison name($isin = null)
- * @property string|null $name
  * @method static \Atomino\Carbon\Database\Finder\Comparison password($isin = null)
  * @property-read string|null $password
  * @method static \Atomino\Carbon\Database\Finder\Comparison phone($isin = null)
@@ -93,9 +92,7 @@ abstract class _User extends Entity implements \Atomino\Bundle\Attachment\Attach
 	protected int|null $id = null;
 	protected function getId():int|null{ return $this->id;}
 	const name = 'name';
-	protected string|null $name = null;
-	protected function getName():string|null{ return $this->name;}
-	protected function setName(string|null $value){ $this->name = $value;}
+	public string|null $name = null;
 	const password = 'password';
 	protected string|null $password = null;
 	protected function getPassword():string|null{ return $this->password;}

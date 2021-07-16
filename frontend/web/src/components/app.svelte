@@ -1,58 +1,20 @@
 <script lang="ts">
 	import "./global-css.svelte"
-	import Router, {replace}from "svelte-spa-router";
-	import routes from "../routes.ts"
-	import {event, user} from "../stores.ts"
-	import api from "../services/api.ts";
-	import 'bulma/css/bulma.css'
-	import toast from "../elements/toast.ts";
-	import Field from "svelma/src/components/Field.svelte"
-	import Input from "svelma/src/components/Input.svelte"
-	import Button from "svelma/src/components/Button.svelte"
+	import Router from "svelte-spa-router";
+	import routes from "src/services/routes"
+	import {event, user} from "src/services/stores"
+	import api from "src/services/api";
+	import ApplicationFrame from "src/components/presentation/application-frame.svelte";
 
-	api.whoAmI();
-	function signOut() { api.signOut();}
+	let promise = api.whoAmI();
 </script>
 
-<nav class="navbar is-transparent mt-0 mb-6" role="navigation" aria-label="main navigation" style="background-color: rgba(0,0,0,.6)">
-	<div class="navbar-brand">
-		<a class="navbar-item has-text-weight-bold has-text-white">
-			<i class="fas fa-user-ninja mr-3"/> Conference ninja
-		</a>
-	</div>
-
-	<div id="navbarBasicExample" class="navbar-menu">
-		<div class="navbar-start">
-			<div class="buttons">
-				<Button iconPack="fas" iconLeft="users" size="is-small" rounded type="is-light" on:click={()=>document.location.href = $event.website}>{$event.title}</Button>
-				{#if ($user)}
-					<Button iconPack="fas" iconLeft="user" size="is-small" rounded type="is-light" on:click={()=>replace('/profile')}>My profile</Button>
-					<Button iconPack="fas" iconLeft="file-powerpoint" size="is-small" rounded type="is-light" on:click={()=>replace('/abstracts')}>My abstracts</Button>
-				{/if}
-			</div>
-
-		</div>
+{#await promise then result}
+	<ApplicationFrame user={user} event={event} onSignOut={()=>api.signOut()}>
 		{#if ($user)}
-			<div class="navbar-end">
-				<div class="navbar-item">
-					<div class="buttons">
-						<Button iconPack="fas" iconLeft="times" rounded size="is-small" type="is-danger" on:click={signOut}>Sign out</Button>
-					</div>
-				</div>
-			</div>
-		{/if}
-	</div>
-</nav>
-
-<main class="container">
-	<section class="mb-6">
-		{#if ($user)}
-			<Router routes={routes.app}/>
+			<Router routes={routes.authenticated}/>
 		{:else }
-			<Router routes={routes.auth}/>
+			<Router routes={routes.unatuhenticated}/>
 		{/if}
-	</section>
-	<section class="has-text-white">
-		<h3 class="is-size-7 has-text-centered	">Privacy Policy</h3>
-	</section>
-</main>
+	</ApplicationFrame>
+{/await}

@@ -14,6 +14,7 @@ use Atomino\Carbon\Plugins\Authorize\Authorizable;
 use Atomino\Carbon\Plugins\Created\Created;
 use Atomino\Carbon\Plugins\Guid\Guid;
 use Atomino\Carbon\Plugins\Updated\Updated;
+use Atomino\Carbon\Validation\UniqueEntity;
 use Atomino\Carbon\ValidationError;
 
 #[Modelify(\Application\Database\DefaultConnection::class, 'user', true)]
@@ -21,6 +22,7 @@ use Atomino\Carbon\ValidationError;
 #[Validator('email', \Symfony\Component\Validator\Constraints\Length::class, ['min' => 4])]
 #[Validator('name', \Symfony\Component\Validator\Constraints\Length::class, ['min' => 4])]
 #[Validator('password', \Symfony\Component\Validator\Constraints\Length::class, ['min' => 8])]
+#[Validator(null, UniqueEntity::class, ["fields"=>['email']])]
 #[Guid()]
 #[Created()]
 #[Updated()]
@@ -39,26 +41,6 @@ class User extends _User {
 		return $data;
 	}
 
-	public static function forgotPassword($email) {
-		$user = static::search(Filter::where(static::email($email)))->pick();
-		if (!$user) return false;
-		//mail($email, "Conference Ninja forgot password", "tönkrement a cucc? geccc!");
-		return true;
-	}
-
-	public static function validatePassword($password): bool|int {
-		$regex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8})/";
-		return preg_match($regex, $password);
-	}
-
-	public static function register($name, $password, $email, $phone): static {
-		if (false === static::validatePassword($password)) throw new ValidationError([["field" => "password", "message" => "Password is not strong enough"]]);
-		$user = static::create();
-		$user->setPassword($password);
-		$user->name = $name;
-		$user->email = $email;
-		$user->phone = $phone;
-		$user->save();
-		return $user;
-	}
+	public function hasParticipation(Event $event): bool { return !is_null($this->getParticipation($event)); }
+	public function getParticipation(Event $event): Participation|null { return Participation::search(Filter::where(Participation::eventId($event->id))->and(Participation::userId($this->id)))->pick(); }
 }

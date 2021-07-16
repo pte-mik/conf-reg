@@ -1,3 +1,4 @@
+// @ts-ignore
 import Toast from "svelma/src/components/Toast/index.js"
 
 export default {

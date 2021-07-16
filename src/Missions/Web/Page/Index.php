@@ -1,6 +1,6 @@
 <?php namespace Application\Missions\Web\Page;
 
-use Application\Modules\ActualEvent;
+use Application\Services\ActualEventService;
 use Atomino\Mercury\Responder\Smart\SmartResponder;
 use Atomino\Mercury\Responder\Smart\Attributes\{Cache, Args, CSS, JS, Init};
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +13,10 @@ use Symfony\Component\HttpFoundation\Response;
 #[Cache( 0 )]
 class Index extends SmartResponder{
 	public array $users;
+	public function __construct(private ActualEventService $actualEventService) { }
+
 	protected function prepare(Response $response){
-		$this->smart['data']->set('event', ActualEvent::get());
+		$this->smart['data']->set('event', $this->actualEventService->get());
 	}
 }
 

@@ -16,6 +16,10 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"strictNullChecks": true
+		"strictNullChecks": true,
+		"baseUrl": "./",
+		"paths": {
+			"src/*": ["src/*"]
+		}
 	}
 }
