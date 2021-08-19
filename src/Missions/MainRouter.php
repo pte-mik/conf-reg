@@ -33,12 +33,14 @@ class MainRouter extends Router {
 			StaticServer::route($this, '/~admin/**', $this->pathResolver->path('var/public/~admin'));
 			StaticServer::route($this, '/~favicon/**', $this->pathResolver->path('var/public/~favicon'));
 			StaticServer::route($this, '/~fonts/**', $this->pathResolver->path('var/public/~fonts'));
+			StaticServer::route($this, '/~gold/**', $this->pathResolver->path('var/public/~gold'));
 		}
 		ImgServer::route($this, $this->attachmentConfig);
 
 		debug($this->request,HttpRunner::DEBUG_CHANNEL_HTTP_REQUEST);
 
 		$this(host: 'admin.' . $this->domain)?->pipe(Admin\Router::class);
+		$this(host: 'gold.' . $this->domain)?->pipe(Gold\Router::class);
 		$this(host: $this->domain)?->pipe(Web\Router::class);
 		$this(host: 'api.' . $this->domain)?->pipe(Api\Router::class);
 		$this(host: ':domain([a-z0-9]*).' . $this->domain)?->pipe(Web\Router::class);

@@ -1,4 +1,4 @@
-<script lang="ts">
+ <script lang="ts">
 	import type User from "src/entities/user.ts";
 	import type Event from "src/entities/event";
 	import {Button, Icon} from "svelma"
@@ -26,7 +26,6 @@
 			<span aria-hidden="true"></span>
 			<span aria-hidden="true"></span>
 		</a>
-
 	</div>
 
 	<div class="navbar-menu" class:is-active={isHamburgerActive}>

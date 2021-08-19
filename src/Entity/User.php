@@ -43,4 +43,9 @@ class User extends _User {
 
 	public function hasParticipation(Event $event): bool { return !is_null($this->getParticipation($event)); }
 	public function getParticipation(Event $event): Participation|null { return Participation::search(Filter::where(Participation::eventId($event->id))->and(Participation::userId($this->id)))->pick(); }
+
+
+	public static function getBannedFilter(){
+	 return	Filter::where(User::id()->gt(20));
+	}
 }
