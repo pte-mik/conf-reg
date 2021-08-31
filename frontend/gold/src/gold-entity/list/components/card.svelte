@@ -1,5 +1,5 @@
 <script lang="ts">
-	import List from "../list";
+	import type List from "../list";
 
 	export let item;
 	export let list: List;

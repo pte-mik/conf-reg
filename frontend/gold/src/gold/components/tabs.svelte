@@ -1,9 +1,10 @@
 <script lang="ts">
+	import type {Writable} from "svelte/store";
 	import type Page from "../page";
 	import Tab from "./tab.svelte";
 
 	export let pages: Array<Page>;
-	export let active: Page;
+	export let active: Writable<Page>;
 	export let onSelect: Function;
 	export let onClose: Function;
 </script>

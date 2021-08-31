@@ -1,6 +1,8 @@
 <script lang="ts">
 	import {get} from "svelte/store";
 	import type DateTimeInput from "./datetime";
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 
 	export let control: DateTimeInput;
 	export let item;

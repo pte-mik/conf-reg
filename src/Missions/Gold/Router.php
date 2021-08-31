@@ -1,5 +1,6 @@
 <?php namespace Application\Missions\Gold;
 
+use Application\Missions\Gold\Api\AuthApi;
 use Application\Missions\Gold\Api\UserApi;
 use Application\Services\ActualEventService;
 use Atomino\Bundle\Authenticate\SessionAuthenticator;
@@ -13,6 +14,7 @@ class Router extends \Atomino\Mercury\Router\Router {
 
 	public function route():void{
 		$this(method: 'GET', path: '/')?->pipe(Cache::class)->pipe(Page\Index::class);
+		$this(path: '/gold/auth/**')?->pipe(AuthApi::class);
 		$this(path: '/gold/user/**')?->pipe(UserApi::class);
 	}
 

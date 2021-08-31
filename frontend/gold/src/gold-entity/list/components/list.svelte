@@ -1,5 +1,5 @@
 <script lang="ts">
-	import List from "../list";
+	import type List from "../list";
 	import Header from "./header.svelte"
 	export let list: List
 	let items = list.$items;

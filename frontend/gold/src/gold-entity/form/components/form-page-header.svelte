@@ -3,7 +3,10 @@
 	import {Button, Icon} from "svelma";
 	import type {Writable} from "svelte/store";
 	import type Form from "../form";
-	import options from "../../options";
+	import copy from "../../../gold/copy";
+
+	import options  from "../../options";
+
 
 	export let form: Form;
 	export let loading: boolean;
@@ -23,11 +26,11 @@
 			{/each}
 		{:else }
 			<Button size="is-small" type="is-black" rounded class="ml-1" disabled>
-				<i class={$options.icon.loading}></i>
+				{@html options.form.loading.icon.tag}
 			</Button>
 		{/if}
 	</div>
-	<div class="m-2 area-icon">
+	<div class="m-2 area-icon" on:dblclick={()=>$id ? copy($id) : null}>
 		<Icon pack={$icon.pack} icon={$icon.icon} size="is-medium"/>
 	</div>
 	<div class="is-size-6 area-title has-text-weight-bold">{$title}</div>

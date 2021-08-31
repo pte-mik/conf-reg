@@ -1,7 +1,7 @@
 <script lang="ts">
 	import FaIcon from "gold/fa-icon";
 	import type {Writable} from "svelte/store";
-	import Form from "../form";
+	import type Form from "../form";
 	import type EntityPage from "../form-page";
 
 	import Header from "./form-page-header.svelte"
@@ -16,7 +16,7 @@
 	let loading: Writable<boolean> = page.$loading;
 	let item = form.$item;
 	let errors = form.$errors;
-	let modal = form.$modal;
+	//let modal = form.$modal;
 
 </script>
 
@@ -24,10 +24,10 @@
 
 <div class="columns m-0 p-0 is-multiline">
 	{#each form.sections as section}
-		<Section section={section} item={item} onChange={()=>form.changed=true} errors={errors}/>
+		<Section section={section} item={item} onChange={()=>form.changed=true} errors={errors} page={page}/>
 	{/each}
 </div>
 
-{#if $modal !== null}
-	<svelte:component {...$modal.props} this={$modal.component} form={form}/>
-{/if}
+<!--{#if $modal !== null}-->
+<!--	<svelte:component {...$modal.props} this={$modal.component} form={form}/>-->
+<!--{/if}-->

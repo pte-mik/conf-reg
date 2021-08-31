@@ -1,6 +1,7 @@
 <script lang="ts">
-	import {Input, Switch} from "svelma"
-	import {subscribe} from "svelte/internal";
+	import {Switch} from "svelma"
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 	import type SwitchInput from "./switch";
 	export let control:SwitchInput;
 	export let item;

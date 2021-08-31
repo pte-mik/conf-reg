@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type ColorInput from "./color";
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 
 	export let control: ColorInput;
 	export let item;

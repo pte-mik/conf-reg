@@ -1,13 +1,10 @@
 <script lang="ts">
-
 	import Page from "../page";
 	import type {Writable} from "svelte/store";
 
 	export let pages: Array<Page>;
 	export let active: Page;
-	let loading:Writable<boolean>;
-
-
+	let loading: Writable<boolean>;
 </script>
 
 {#each $pages as page (page.id)}

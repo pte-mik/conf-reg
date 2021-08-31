@@ -1,6 +1,8 @@
 <script lang="ts">
 	import {get} from "svelte/store";
-	import CheckboxesInput from "./checkboxes";
+	import type CheckboxesInput from "./checkboxes";
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 
 	export let control: CheckboxesInput;
 	export let item;

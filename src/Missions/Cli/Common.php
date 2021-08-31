@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Output\Output;
 
 class Common extends CliModule {
+
 	public function __construct(private ApplicationConfig $config) { }
 
 	#[Command("show-config", "cfg", "Shows the config")]

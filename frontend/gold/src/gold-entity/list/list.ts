@@ -10,7 +10,7 @@ import type {IListApi, IListOptions} from "../interfaces";
 import CCard from "./components/card.svelte";
 import CList from "./components/list.svelte";
 import ListButton from "./list-button";
-import $options from "gold-entity/options";
+import options from "gold-entity/options";
 
 export default abstract class List extends GoldList {
 
@@ -50,6 +50,7 @@ export default abstract class List extends GoldList {
 	public view: string | null = null;
 	public sorting: string | null = null;
 	public quicksearch: string = "";
+	public filter: any;
 	public buttons: Array<ListButton> = [];
 
 	get icon(): FaIcon { return (this.constructor as typeof List).icon;}
@@ -83,7 +84,7 @@ export default abstract class List extends GoldList {
 	}
 
 	async reload() {
-		const data = await this.api!.get(this.options.pagesize, get(this.$page), this.view, this.sorting, this.quicksearch);
+		const data = await this.api!.get(this.options.pagesize, get(this.$page), this.view, this.sorting, this.quicksearch, this.filter);
 		this.$items.set(data.items);
 		this.$count.set(data.count);
 		this.$page.set(data.page);
@@ -95,11 +96,10 @@ export default abstract class List extends GoldList {
 	}
 }
 
-let options = get($options);
 
 export let buttons: Record<"new", { icon: FaIcon, action: (form: List) => void }> = {
 	new: {
-		icon: options.icon.list.new,
+		icon: options.list.new.icon,
 		action: (list: List) => list.addNew()
 	}
 }

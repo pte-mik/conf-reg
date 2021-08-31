@@ -1,6 +1,6 @@
 import AbstractInput, {component, layout} from "gold-entity/form/abstract-input";
 import type Form from "gold-entity/form/form";
-import CSelector from "./selector.svelte"
+import CCombobox from "./combobox.svelte"
 
 export interface IApi {
 	search(search: string): Promise<Array<IResult>>;
@@ -33,12 +33,12 @@ export class SelectorApi implements IApi {
 	}
 }
 
-@component(CSelector)
+@component(CCombobox)
 @layout("row")
-export default class SelectorInput extends AbstractInput {
+export default class ComboboxInput extends AbstractInput {
 
 	public api: IApi | null = null;
-	public multi: boolean = false;
+	public multi: boolean|number = false;
 	public form: typeof Form | null = null;
 	public minChar:number = 3;
 
@@ -58,8 +58,8 @@ export default class SelectorInput extends AbstractInput {
 		return this;
 	}
 
-	Multi(): this {
-		this.multi = true;
+	Multi(amount:true|number = true): this {
+		this.multi = amount;
 		return this;
 	}
 }

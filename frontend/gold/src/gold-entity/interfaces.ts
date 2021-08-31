@@ -1,47 +1,37 @@
 import type FaIcon from "gold/fa-icon";
 
-export interface IOptions {
-	// iconSave: FaIcon;
-	// iconReload: FaIcon;
-	// iconDelete: FaIcon;
-	// iconAttachments: FaIcon;
-	// iconLoading: FaIcon;
-	// iconFilter: FaIcon;
-	// iconSort: FaIcon;
-	// iconRight: FaIcon;
-	// iconLeft: FaIcon;
-	// iconInfo: FaIcon;
-	// iconNewItem: FaIcon;
 
-	icon: {
-		loading: FaIcon,
-		list: {
-			filter: FaIcon,
-			sort: FaIcon,
-			info: FaIcon,
-			new: FaIcon,
-			pager: {
-				right: FaIcon,
-				left: FaIcon
-			}
-		},
-		form: {
-			button: {
-				save: FaIcon,
-				reload: FaIcon,
-				delete: FaIcon,
-				attachments: FaIcon,
-			}
-		},
-		input:{
-			selector:{
-				search: FaIcon,
-				add: FaIcon
-			},
-			number:{
-				up:FaIcon,
-				down:FaIcon
-			}
+export interface IOptions {
+	list: {
+		filter: { icon: FaIcon; }
+		sort: { icon: FaIcon }
+		info: { icon: FaIcon }
+		new: { icon: FaIcon }
+		pager: {
+			right: { icon: FaIcon }
+			left: { icon: FaIcon }
+		}
+	}
+	form: {
+		loading: {icon: FaIcon}
+		button: {
+			save: { icon: FaIcon }
+			reload: { icon: FaIcon }
+			delete: { icon: FaIcon }
+			attachments: { icon: FaIcon }
+		}
+	}
+
+	input: {
+		combobox: {
+			search: { icon: FaIcon }
+			add: { icon: FaIcon }
+			link: { icon: FaIcon }
+			remove: { icon: FaIcon }
+		}
+		number: {
+			up: { icon: FaIcon }
+			down: { icon: FaIcon }
 		}
 	}
 }
@@ -55,20 +45,14 @@ export interface IListOptions {
 
 export interface IListApi {
 	getOptions(): Promise<any>;
-
-	get(pagesize: number, page: number, view: string | null, sorting: string | null, quicksearch: string): Promise<any>;
+	get(pagesize: number, page: number, view: string | null, sorting: string | null, quicksearch: string, filter:any): Promise<any>;
 }
 
 export interface IFormApi {
 	getOptions(): Promise<any>;
-
 	get(id: number): Promise<any>;
-
 	blank(): Promise<any>;
-
 	create(item: Object): Promise<false | null | number>;
-
 	update(item: Object): Promise<false | null | number>;
-
 	delete(id: number): Promise<boolean>;
 }

@@ -33,6 +33,7 @@
     "font-awesome-animation": "^1.1.1",
     "font-awesome-filetypes": "^2.1.0",
     "magic": "github:laborci/atomino-magic-ui",
+    "marked": "^3.0.2",
     "material-icons": "^0.6.3",
     "mdi-svelte": "^1.1.2",
     "postcss": "^8.2.15",

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type TimeInput from "./time";
-
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 	export let control: TimeInput;
 	export let item;
 	export let onChange: Function;

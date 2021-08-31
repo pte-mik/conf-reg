@@ -1,28 +1,37 @@
 <script lang="ts">
-	import MenuItem from "../menu-item";
+	import type {IAuthApi} from "../interfaces";
 	import ListManager from "../list-manager";
+	import MenuItem from "../menu-item";
+	import options from "../options";
 	import PageManager from "../page-manager";
-	import {get} from "svelte/store";
+
+	import user from "../user";
 	import Frame from "./frame.svelte";
-	import goldOptions from "../options";
+	import Login from "./login.svelte"
 
 	export let pageManager: PageManager;
 	export let listManager: ListManager;
 	export let menu: Array<MenuItem>;
+	export let authApi: IAuthApi;
 
 	pageManager.listManager = listManager;
 	listManager.pageManager = pageManager;
 
-	let options = get(goldOptions);
-
 	window.document.title = options.title;
-	document.body.style.backgroundColor = options.backgroundColor;
-	document.body.style.backgroundImage = 'url("' + options.backgroundImageUrl + '")';
+	document.body.style.backgroundColor = options.background.color;
+	document.body.style.backgroundImage = 'url("' + options.background.imageUrl + '")';
 
+	let auth = authApi.get();
 </script>
 
-<Frame pageManager={pageManager} listManager={listManager} menu={menu}/>
-
+{#await auth}
+{:then r}
+	{#if $user === null}
+		<Login authApi={authApi}/>
+	{:else}
+		<Frame pageManager={pageManager} listManager={listManager} menu={menu} authApi={authApi}/>
+	{/if}
+{/await}
 
 <style lang="scss" global>
 	@import "@creativebulma/bulma-divider/dist/bulma-divider.css";
@@ -56,7 +65,7 @@
 	html, body {
 		min-height: 100%;
 	}
-	.border-0{border:0!important;}
+	.border-0 {border: 0 !important;}
 	.sticky-grid { height: calc(100vh - 72px);
 		> .box {
 			background-color: #0006; display: grid; height: 100%;

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type RadioInput from "./radio";
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 
 	export let control: RadioInput;
 	export let item;

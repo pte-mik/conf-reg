@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type DateInput from "./date";
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 
 	export let control: DateInput;
 	export let item;

@@ -1,9 +1,11 @@
 <script lang="ts">
+	import type EntityPage from "../../form/form-page";
 	import type {Writable} from "svelte/store";
 	import AbstractInput from "../abstract-input";
 	import {Notification} from "svelma";
 
 	export let item;
+	export let page: EntityPage;
 	export let control: AbstractInput;
 	export let onChange: Function;
 	export let errors: Writable<Array<any>>;
@@ -13,7 +15,7 @@
 	<div class="field-input layout-{control.layout}">
 		<label class="label is-small has-text-primary-dark">{control.label}</label>
 		<div>
-			<svelte:component item={item} this={control.component} control={control} onChange={onChange}/>
+			<svelte:component item={item} this={control.component} control={control} onChange={onChange} page={page}/>
 		</div>
 	</div>
 	{#each $errors as error}

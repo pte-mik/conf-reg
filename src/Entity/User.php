@@ -2,6 +2,7 @@
 
 use Application\Atoms\Entity\_User;
 use Atomino\Bundle\Comment\CommenterInterface;
+use Atomino\Carbon\Attributes\BelongsTo;
 use Atomino\Carbon\Attributes\HasMany;
 use Atomino\Carbon\Attributes\Modelify;
 use Atomino\Carbon\Attributes\Protect;
@@ -27,13 +28,18 @@ use Atomino\Carbon\ValidationError;
 #[Created()]
 #[Updated()]
 #[Attachmentable()]
-#[AttachmentCollection(field: 'avatar', maxCount: 1, maxSize: 512 * 1024, mimetype: "/image\/.*/")]
+#[AttachmentCollection(field: 'avatar', maxCount: 10, maxSize: 512 * 1024)]
+#[AttachmentCollection(field: 'images', maxSize: 512 * 1024, mimetype: "/image\/.*/")]
+#[AttachmentCollection(field: 'files', maxSize: 512 * 1024)]
 #[Authenticable('email')]
 #[Authorizable('group', ['user', 'moderate', 'edit'])]
 #[HasMany('events', Event::class, 'organizerId')]
+#[BelongsTo('boss', User::class, "bossId")]
 class User extends _User {
 
-	const GROUPS = [];
+	const GROUPS = [
+		self::group__admin=>[self::ROLE_EDIT, self::ROLE_USER, self::ROLE_MODERATE]
+	];
 
 	public function jsonSerialize(): array {
 		$data = parent::jsonSerialize();

@@ -1,6 +1,9 @@
 <script lang="ts">
 	import type NumberInput from "./number";
 	import {Input} from "svelma"
+	import options from "gold-entity/options";
+	import type EntityPage from "../../../form/form-page";
+	export let page: EntityPage;
 
 	export let control: NumberInput;
 	export let item;
@@ -50,10 +53,10 @@
 		</div>
 	</div>
 	<div class="control">
-		<button on:click={()=>{input.stepUp();$item[control.field] = input.value;}} class="button is-primary is-small"><i class="fas fa-chevron-up"></i></button>
+		<button on:click={()=>{input.stepUp();$item[control.field] = input.value;}} class="button is-primary is-small">{@html options.input.number.up.icon.tag}</button>
 	</div>
 	<div class="control">
-		<button on:click={()=>{input.stepDown();$item[control.field] = input.value;}} class="button is-primary is-small"><i class="fas fa-chevron-down"></i></button>
+		<button on:click={()=>{input.stepDown();$item[control.field] = input.value;}} class="button is-primary is-small">{@html options.input.number.down.icon.tag}</button>
 	</div>
 </div>
 

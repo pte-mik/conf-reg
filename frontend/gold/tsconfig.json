@@ -20,7 +20,8 @@
 		"paths": {
 			"src/*": ["src/*"],
 			"gold/*": ["src/gold/*"],
-			"gold-entity/*": ["src/gold-entity/*"]
+			"gold-entity/*": ["src/gold-entity/*"],
+			"gold-atomino/*": ["src/gold-atomino/*"]
 		}
 	}
 }

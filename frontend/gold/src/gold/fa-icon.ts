@@ -35,6 +35,9 @@ export default class FaIcon {
 	}
 
 	toString() {return this.pack + ' fa-' + this.icon + (this.animation !== null ? " fa-" + this.animation : '') + (this.faa !== null ? this.faa : '')}
+	get tag():string{ return '<i class="'+this.toString()+'"/>'; }
+	get Icon():string{ return '<span class="icon">' + this.tag + '</span>'; }
+	Tag(...classes:Array<string>):string{	return '<i class="'+this.toString()+' '+classes.join(' ')+'"/>';}
 }
 
 class FaAnim{

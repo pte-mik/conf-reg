@@ -5,6 +5,7 @@ export default class AbstractInput {
 	static layout: "column" | "row" = "column";
 	public layout: "column" | "row" = "column";
 	public hint: string | null = null;
+	public role: Array<string> | null = null;
 
 	constructor(public field: string, public label: string | null = null) {
 		this.label = this.label !== null ? this.label : this.field.toString();
@@ -18,8 +19,13 @@ export default class AbstractInput {
 		return this;
 	}
 
-	Layout(layout:"column"|"row"):this{
+	Layout(layout: "column" | "row"): this {
 		this.layout = layout;
+		return this;
+	}
+
+	Role(role: string | Array<string>): this {
+		this.role = typeof role === "string" ? [role] : role;
 		return this;
 	}
 }

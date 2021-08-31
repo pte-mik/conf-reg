@@ -1,4 +1,6 @@
 <script lang="ts">
+	import modalManager from "../modal-manager";
+	import type {IAuthApi} from "../interfaces";
 	import MenuItem from "../menu-item";
 	import type ListManager from "../list-manager";
 	import type PageManager from "../page-manager";
@@ -10,10 +12,12 @@
 	export let pageManager:PageManager;
 	export let listManager:ListManager;
 	export let menu: Array<MenuItem>;
+	export let authApi:IAuthApi;
 
+	let modals = modalManager.modals;
 </script>
 
-<Header menu={menu}/>
+<Header menu={menu} authApi={authApi}/>
 
 <div class="columns m-1">
 	<ListContainer listManager={listManager}/>
@@ -30,3 +34,6 @@
 	</div>
 </div>
 
+{#each $modals as modal (modal.id)}
+	<svelte:component this={modal.component} {...modal.props}/>
+{/each}

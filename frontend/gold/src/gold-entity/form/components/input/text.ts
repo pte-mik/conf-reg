@@ -6,9 +6,16 @@ import AbstractInput, {component, layout} from "../../abstract-input";
 export default class TextInput extends AbstractInput {
 
 	public code:boolean = false;
+	public markdown: boolean = false;
 
 	Code():this{
 		this.code = true;
+		return this;
+	}
+
+	Markdown():this{
+		this.code = true;
+		this.markdown = true;
 		return this;
 	}
 }

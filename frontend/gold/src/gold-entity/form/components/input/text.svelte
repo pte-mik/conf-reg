@@ -1,11 +1,16 @@
 <script lang="ts">
-
 	import type TextInput from "./text";
-	export let control:TextInput;
+	import type EntityPage from "../../../form/form-page";
+	import marked from "marked"
+
+	export let page: EntityPage;
+
+	export let control: TextInput;
 	export let item;
 	export let onChange: Function;
 
 	let code = control.code;
+	let markdown = control.markdown;
 
 	/* Handle tab key */
 	function keydown(event) {
@@ -21,9 +26,24 @@
 	}
 </script>
 
-<div class="is-size-7 growing" class:code data-replicated-value={$item[control.field]}>
-	<textarea class="textarea is-size-7 has-fixed-size" class:code on:change={onChange} on:keydown={keydown} bind:value={$item[control.field]}></textarea>
-</div>
+{#if markdown}
+	<div class="columns m-0">
+		<div class="column p-0 pr-1">
+			<div class="is-size-7 growing" class:code data-replicated-value={$item[control.field]}>
+				<textarea class="textarea is-size-7 has-fixed-size" class:code on:change={onChange} on:keydown={keydown} bind:value={$item[control.field]}></textarea>
+			</div>
+		</div>
+		<div class="column p-0">
+			<div class="card is-size-7 p-3">
+				{@html marked(typeof $item[control.field] === 'string' ?  $item[control.field] : '')}
+			</div>
+		</div>
+	</div>
+{:else }
+	<div class="is-size-7 growing" class:code data-replicated-value={$item[control.field]}>
+		<textarea class="textarea is-size-7 has-fixed-size" class:code on:change={onChange} on:keydown={keydown} bind:value={$item[control.field]}></textarea>
+	</div>
+{/if}
 
 <style lang="scss">
 	div.growing {
@@ -44,7 +64,7 @@
 		font-family: "Courier New", monospace !important;
 		tab-size: 3;
 		font-weight: 600;
-		font-size:13px !important;
+		font-size: 13px !important;
 	}
 	div.growing::after,
 	textarea {

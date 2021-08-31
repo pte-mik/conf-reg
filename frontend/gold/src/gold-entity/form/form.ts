@@ -1,7 +1,8 @@
 import Confirm from "gold-entity/form/components/confirm.svelte";
 import type {IFormApi} from "gold-entity/interfaces";
-import $options from "gold-entity/options";
+import options from "gold-entity/options";
 import FaIcon from "gold/fa-icon";
+import {Modal} from "gold/modal-manager";
 import type Page from "gold/page";
 import toast from "gold/toast";
 import type {SvelteComponent} from "svelte";
@@ -11,14 +12,13 @@ import type List from "../list/list";
 import FormButton from "./form-button";
 import FormSection from "./form-section";
 
-
 export default abstract class Form {
 
 	static buttons: Array<{ icon: FaIcon, action: (form: Form) => void, onlyIfExists: boolean }> = [];
 	static icon: FaIcon;
 	static api: IFormApi;
-	static list: (() => typeof List) | null;
-	public list: typeof List | null;
+	static list: (() => typeof List | Array<typeof List>) | null;
+	public list: typeof List | Array<typeof List> | null;
 	public api: IFormApi | null = null;
 	public buttons: Array<FormButton> = [];
 
@@ -37,9 +37,9 @@ export default abstract class Form {
 
 	abstract build(): void;
 
-	public $modal: Writable<{ component: typeof SvelteComponent, props: any } | null> = writable(null);
-	public openModal(component: typeof SvelteComponent, props: {} = {}) { this.$modal.set({component, props});}
-	public closeModal() { this.$modal.set(null);}
+	// public $modal: Writable<{ component: typeof SvelteComponent, props: any } | null> = writable(null);
+	// public openModal(component: typeof SvelteComponent, props: {} = {}) { this.$modal.set({component, props});}
+	// public closeModal() { this.$modal.set(null);}
 
 	public sections: Array<FormSection> = [];
 	public page: Page | null = null;
@@ -114,20 +114,22 @@ export default abstract class Form {
 	}
 
 	public async deleteItem(): Promise<boolean> {
-		this.openModal(Confirm, {
+
+		let modal = new Modal(Confirm, {
 			title: "Are you sure?",
 			content: "Do you really want to delete this item?",
+			form: this,
 			buttons: [
 				{
 					label: "Cancel",
 					style: "is-primary",
-					action: () => this.closeModal()
+					action: () => {modal.close()}
 				},
 				{
 					label: "Delete",
 					style: "is-danger",
 					action: async () => {
-						this.closeModal();
+						modal.close();
 						this.page!.loading = true;
 						if (typeof this.id !== 'number') throw "ERROR";
 						await this.api!.delete(this.id);
@@ -137,15 +139,26 @@ export default abstract class Form {
 					}
 				}
 			]
-		})
+		});
+		modal.open();
 		return true;
 	}
 
-	protected reloadList() { (this.page!.pageManager!.listManager!.getList(this.list!.id) as List)?.reload();}
+	protected reloadList() {
+		let list: typeof List | Array<typeof List> | null = this.list;
+		if (list === null) return;
+		if (list instanceof Array) {
+			for (let l of list) {
+				(this.page!.pageManager!.listManager!.getList(l.id) as List)?.reload();
+			}
+		} else {
+			(this.page!.pageManager!.listManager!.getList(list.id) as List)?.reload();
+		}
+	}
 
 }
 
-export function form(icon: FaIcon, api: IFormApi, list: (() => typeof List) | null = null) {
+export function form(icon: FaIcon, api: IFormApi, list: (() => typeof List | Array<typeof List>) | null = null) {
 	return function (constructor: typeof Form) {
 		constructor.icon = icon;
 		constructor.list = list;
@@ -160,26 +173,20 @@ export function button(icon: FaIcon | { icon: FaIcon, action: (form: Form) => vo
 	}
 }
 
-let options = get($options);
 
-export let buttons: Record<"save" | "attachments" | "reload" | "delete", { icon: FaIcon, action: (form: Form) => void, onlyIfExists: boolean }> = {
+export let buttons: Record<"save" | "reload" | "delete", { icon: FaIcon, action: (form: Form) => void, onlyIfExists: boolean }> = {
 	save: {
-		icon: options.icon.form.button.save,
+		icon: options.form.button.save.icon,
 		action: (form: Form) => form.saveItem(),
 		onlyIfExists: false
 	},
-	attachments: {
-		icon: options.icon.form.button.attachments,
-		action: (form: Form) => form.openModal(Confirm, {title: "attachments", close: true, full: true}),
-		onlyIfExists: true
-	},
 	reload: {
-		icon: options.icon.form.button.reload,
+		icon: options.form.button.reload.icon,
 		action: (form: Form) => form.loadItem(),
 		onlyIfExists: true
 	},
 	delete: {
-		icon: options.icon.form.button.delete,
+		icon: options.form.button.delete.icon,
 		action: (form: Form) => form.deleteItem(),
 		onlyIfExists: true
 	}
