@@ -79,7 +79,7 @@
 		};
 		img.safezone = data.safezone;
 		img.focus = data.focus;
-		//doc.class.fetcher.attachment.modify(doc.id, file.name, data).then(close).then(reload)
+		modal.close();
 	}
 
 	function imgloaded() {
@@ -100,7 +100,7 @@
 			<p class="modal-card-title is-size-6 has-text-weight-bold">Set safe zone & focus</p>
 			<button class="delete" aria-label="close" on:click={modal.close}></button>
 		</header>
-		<main class="modal-card-body has-background-black-bis m-0 p-0">
+		<main class="modal-card-body has-background-black-bis m-0">
 			<div on:mousemove={mousemove} bind:this={wrapperDiv} class="wrapper">
 				<img on:load={imgloaded} alt="" draggable="false" class="back" src={file.url}>
 				<img alt="" style={"clip: rect(" + safe.y +"px, " + (safe.x + safe.width) +"px, "+(safe.y + safe.height)+"px, "+safe.x+"px)"} draggable="false" class="front" src={file.url}>
@@ -112,13 +112,12 @@
 		</main>
 		<footer class="modal-card-foot is-justify-content-center p-2">
 			<button class="button is-danger is-small" on:click={()=>modal.close()}>Cancel</button>
-			<button class="button is-primary is-small" on:click={()=>modal.close()}>OK</button>
+			<button class="button is-primary is-small" on:click={()=>save()}>OK</button>
 		</footer>
 	</div>
 </Modal>
 
 <style lang="scss">
-	//@import "../../../style/mixins";
 	@keyframes border-dance {
 		0% { border-color: #000;}
 		50% { border-color: #fff;}
@@ -127,14 +126,14 @@
 
 	div.wrapper {
 		position: relative;
-		max-height: calc(100vh - 160px);
-		max-width: calc(100vw - 160px);
+		max-height: calc(100vh - 200px);
+		max-width: calc(100vw - 200px);
 	}
 
 	img.back {
 		background-color: rgba(0, 0, 0, .5);
-		max-height: calc(100vh - 160px);
-		max-width: calc(100vw - 160px);
+		max-height: calc(100vh - 200px);
+		max-width: calc(100vw - 200px);
 		filter: brightness(30%);
 		user-select: none;
 		display: block;
@@ -145,8 +144,8 @@
 		user-select: none;
 		position: absolute;
 		top: 0; left: 0;
-		max-height: calc(100vh - 160px);
-		max-width: calc(100vw - 160px);
+		max-height: calc(100vh - 200px);
+		max-width: calc(100vw - 200px);
 	}
 	div.frame {
 		position: absolute;

@@ -38,7 +38,7 @@ export default class UserForm extends Form {
 			.addControl(new StringInput("email", "e-mail"))
 			.addControl(new SwitchInput("switch", "kapcs"))
 			.addControl(new PasswordInput('password'))
-			.addControl(new ComboboxInput("bossId", "boss").Api('/gold/user').Form(UserForm))
+			.addControl(new ComboboxInput("bossId", "boss").Api('/gold/user'))
 			.addControl(new ComboboxInput("workerIds", "workers").Multi(3).Api('/gold/user').Form(UserForm))
 			.addControl(new TextInput('text').Markdown())
 			.addControl(new TextInput('text').Code())

@@ -49,7 +49,6 @@ export interface IListApi {
 }
 
 export interface IFormApi {
-	getOptions(): Promise<any>;
 	get(id: number): Promise<any>;
 	blank(): Promise<any>;
 	create(item: Object): Promise<false | null | number>;

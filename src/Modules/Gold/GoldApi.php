@@ -1,10 +1,14 @@
 <?php namespace Application\Modules\Gold;
 
+use Atomino\Bundle\Attachment\Attachment;
+use Atomino\Bundle\Attachment\AttachmentableInterface;
+use Atomino\Bundle\Attachment\FileException;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
 use Atomino\Carbon\ValidationError;
 use Atomino\Mercury\Responder\Api\Api;
 use Atomino\Mercury\Responder\Api\Attributes\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class GoldApi extends Api {
 
@@ -18,41 +22,68 @@ class GoldApi extends Api {
 	protected int $pagesize;
 	protected bool $quicksearch;
 
-	public function __construct() {
+	public function __construct() { $this->entity = Gold::get(new \ReflectionClass($this))->class; }
+
+	private function getListOptions(): void {
 		$reflectionClass = new \ReflectionClass($this);
-		$methods = $reflectionClass->getMethods();
-		$this->entity = Gold::get($reflectionClass)->class;
 		$this->pagesize = Gold::get($reflectionClass)->pagesize;
 		$this->quicksearch = Gold::get($reflectionClass)->quicksearch;
+		$this->addViews();
+		$this->addSortings();
+	}
 
+	protected function getItem(int|null $id): Entity|null {
+		$item = ($this->entity)::pick($id);
+		if (is_null($item)) $this->setStatusCode(404);
+		return $item;
+	}
+
+	protected final function addView(GoldView $view): void { $this->views[$view->name] = $view; }
+	protected final function addSorting(GoldSorting $sorting): void { $this->sortings[$sorting->name] = $sorting; }
+
+	protected function addViews(): void {
+		$reflectionClass = new \ReflectionClass($this);
+		$methods = $reflectionClass->getMethods();
 		foreach ($methods as $method) {
 			if (!is_null($view = GoldView::get($method))) {
-				$view->method = $method->name;
-				$this->views[$view->name] = $view;
+				$method->setAccessible(true);
+				$view->method = fn() => $method->invoke($this, ...func_get_args());
+				$this->addView($view);
 			}
+		}
+	}
+	protected function addSortings(): void {
+		$reflectionClass = new \ReflectionClass($this);
+		$methods = $reflectionClass->getMethods();
+		foreach ($methods as $method) {
 			if (!is_null($sorting = GoldSorting::get($method))) {
-				$sorting->method = $method->name;
-				$this->sortings[$sorting->name] = $sorting;
+				$method->setAccessible(true);
+				$sorting->method = fn() => $method->invoke($this, ...func_get_args());
+				$this->addSorting($sorting);
 			}
 		}
 	}
 
-	protected function view(string|null $view): Filter|null { return null; }
-	protected function sorting(string|null $view): Filter|null { return null; }
-
 	protected function listExport(Entity $item): array { return $item->export(); }
 	protected function formExport(Entity $item): array { return $item->export(); }
-	protected function updateItem(Entity $item, array $data) { $item->import($data)->save(); }
-	protected function createItem(Entity $item, array $data) { $item->import($data)->save(); }
+	/** @throws ValidationError */
+	protected function updateItem(Entity $item, array $data): int|null { return $item->import($data)->save(); }
+	/** @throws ValidationError */
+	protected function createItem(Entity $item, array $data): int|null { return $item->import($data)->save(); }
 	protected function deleteItem(Entity $item) { $item->delete(); }
-	protected function quickSearch(string $search) { return Filter::where("id=$1", $search); }
+	protected function quickSearch(string $search): Filter { return Filter::where("id=$1", $search); }
 
-	// item routes
+	protected function selectFilter(string $search): Filter|null { return null; }
+	protected function selectMap(Entity $item): string { return $item->id; }
+
+	#region *** ITEM ENDPOINTS ***
 
 	#[Route("POST", '/create')]
-	public function create() {
+	public function create(): int {
+
 		$data = $this->data->get("item");
 		$item = ($this->entity)::create();
+
 		try {
 			$this->createItem($item, $data);
 		} catch (ValidationError $e) {
@@ -62,14 +93,12 @@ class GoldApi extends Api {
 		return $item->id;
 	}
 
-	#[Route("POST", '/update')]
-	public function update() {
+	#[Route("POST", '/update/:id([0-9]+)')]
+	public function update(int $id): null|int {
+		if (is_null($item = $this->getItem($id))) return null;
+
 		$data = $this->data->get("item");
-		$item = ($this->entity)::pick($data["id"]);
-		if (is_null($item)) {
-			$this->setStatusCode(404);
-			return null;
-		}
+
 		try {
 			$this->updateItem($item, $data);
 		} catch (ValidationError $e) {
@@ -79,44 +108,30 @@ class GoldApi extends Api {
 		return $item->id;
 	}
 
-	#[Route("POST", '/delete')]
-	public function delete() {
-		$id = $this->data->get("id");
-		$item = ($this->entity)::pick($id);
-		if (is_null($item)) {
-			$this->setStatusCode(404);
-			return null;
-		}
-		try {
-			$this->deleteItem($item);
-		} catch (ValidationError $e) {
-			$this->setStatusCode(Api::VALIDATION_ERROR);
-			return $e->getMessages();
-		}
-		return $item->id;
+	#[Route("POST", '/delete/:id([0-9]+)')]
+	public function delete(int $id) {
+		if (is_null($item = $this->getItem($id))) return;
+		$this->deleteItem($item);
 	}
 
-	#[Route("POST", '/get')]
-	public function get() {
-		$id = $this->data->get('id');
-		$item = ($this->entity)::pick($id);
-		if (is_null($item)) {
-			$this->setStatusCode(404);
-			return null;
-		} else {
-			return $this->formExport($item);
-		}
+	#[Route("POST", '/get/:id([0-9]+)')]
+	public function get(int $id): array|null {
+		if (is_null($item = $this->getItem($id))) return null;
+		return $this->formExport($item);
 	}
 
 	#[Route("POST", '/blank')]
-	public function blank() {
+	public function blank(): array {
 		return ($this->entity)::create()->export();
 	}
 
-	// list routes
+	#endregion
+
+	#region *** LIST ENDPOINTS ***
 
 	#[Route("POST", '/list/get')]
 	public function listGet() {
+		$this->getListOptions();
 		$pagesize = $this->data->get('pagesize');
 		$page = $this->data->get('page');
 		$view = $this->data->get('view');
@@ -125,9 +140,9 @@ class GoldApi extends Api {
 
 		$method = is_null($view) ? null : $this->views[$view]->method;
 		/** @var Filter $filter */
-		$filter = is_null($method) ? null : $this->$method();
+		$filter = is_null($method) ? null : $method();
 
-		if($quicksearch && $this->quicksearch){
+		if ($quicksearch && $this->quicksearch) {
 			$quicksearch = $this->quickSearch($quicksearch);
 			$filter = is_null($filter) ? $quicksearch : $filter->and($quicksearch);
 		}
@@ -137,18 +152,19 @@ class GoldApi extends Api {
 			$sorting = substr($sorting, 1);
 			$method = is_null($sorting) ? null : $this->sortings[$sorting]->method;
 		}
-		$order = is_null($method) ? [] : $this->$method($dir);
+		$order = is_null($method) ? [] : $method($dir);
 
 		$items = ($this->entity)::search($filter)->order(...$order)->page($pagesize, $page, $count);
-		if(count($items) === 0){
-			$page = ceil($count/$pagesize);
+		if (count($items) === 0) {
+			$page = ceil($count / $pagesize);
 			$items = ($this->entity)::search($filter)->order(...$order)->page($pagesize, $page, $count);
 		}
 		return ["items" => array_map(fn(Entity $item) => $this->listExport($item), $items), "count" => $count, "page" => $page];
 	}
 
 	#[Route("POST", '/list/options')]
-	public function listOptions() {
+	public function listOptions(): array {
+		$this->getListOptions();
 		return [
 			"quicksearch" => $this->quicksearch,
 			"pagesize"    => $this->pagesize,
@@ -157,27 +173,167 @@ class GoldApi extends Api {
 		];
 	}
 
-	// select
+	#endregion
+
+	#region *** COMBOBOX ENDPOINTS ***
 
 	#[Route("POST", "/select/search")]
-	public function selectSearch(){
+	public function selectSearch(): array {
 		$search = $this->data->get("search");
 		$items = ($this->entity)::search($this->selectFilter($search))->collect();
-		return array_map(fn($item)=>["key"=>$item->id, "value"=>$this->selectMap($item)], $items);
+		return array_map(fn($item) => ["key" => $item->id, "value" => $this->selectMap($item)], $items);
 	}
 
 	#[Route("POST", "/select/get")]
-	public function selectGet(){
+	public function selectGet(): array {
 		$value = $this->data->get("value");
 		$items = ($this->entity)::search(Filter::where(($this->entity)::id($value)))->collect();
-		return array_map(fn($item)=>["key"=>$item->id, "value"=>$this->selectMap($item)], $items);
+		return array_map(fn($item) => ["key" => $item->id, "value" => $this->selectMap($item)], $items);
 	}
 
-	protected function selectFilter(string $search):Filter|null{
-		return null;
+	#endregion
+
+	#region *** ATTACHMENT ENDPOINTS ***
+
+	#[Route(Api::POST, '/attachment/get/:id([0-9]+)')]
+	public function getAttachments(int $id): array|bool {
+		/**
+		 * @var AttachmentableInterface $item
+		 */
+
+		if (is_null($item = $this->getItem($id))) return false;
+
+		$collections = [];
+		$files = [];
+
+		$attachments = $item->getAttachmentStorage()->attachments;
+		$collectionNames = array_keys($item->getAttachmentStorage()->collections);
+
+		foreach ($collectionNames as $collectionName) {
+			$collections[$collectionName] = [
+				'files'    => $item->getAttachmentStorage()->getCollection($collectionName)->files,
+				'maxCount' => $item->getAttachmentStorage()->getCollection($collectionName)->maxCount,
+				'maxSize'  => $item->getAttachmentStorage()->getCollection($collectionName)->maxSize,
+				'mimetype' => $item->getAttachmentStorage()->getCollection($collectionName)->mimetype,
+			];
+		}
+
+		foreach ($attachments as $attachment) {
+			$file = $attachment->jsonSerialize();
+			$file['name'] = $attachment->filename;
+			$file['url'] = $attachment->url;
+			if ($attachment->isImage) {
+				$file['isImage'] = true;
+				$file['thumbnail'] = $attachment->image->crop(240, 180)->webp;
+			} else {
+				$file['isImage'] = false;
+			}
+			$files[$attachment->filename] = $file;
+		}
+		return ['collections' => $collections, 'files' => $files,];
 	}
 
-	protected function selectMap(Entity $item){
-		return $item->id;
+	#[Route(Api::POST, '/attachment/save-file-details/:id([0-9]+)')]
+	public function saveFileDetails(int $id): bool {
+		/**
+		 * @var AttachmentableInterface $item
+		 * @var Attachment|null $file
+		 */
+
+		if (is_null($item = $this->getItem($id))) return false;
+
+		$filename = $this->data->get('filename');
+		$data = $this->data->get('data');
+
+		try {
+			$file = $item->getAttachmentStorage()->getAttachment($filename);
+
+			$file->storage->begin();
+			{
+				$file->setFocus($data['focus']);
+				$file->setSafezone($data['safezone']);
+				$file->setTitle($data['title']);
+				$file->setProperties($data['properties']);
+			}
+			$file->storage->commit();
+
+			if ($filename !== $data['filename']) $file->rename($data['filename']);
+			return true;
+		} catch (\Throwable $e) {
+			$this->setStatusCode(self::VALIDATION_ERROR);
+			return false;
+		}
 	}
+
+	#[Route(Api::POST, '/attachment/remove-file/:id([0-9]+)')]
+	public function removeFile(int $id): bool {
+		/**
+		 * @var AttachmentableInterface $item
+		 */
+		if (is_null($item = $this->getItem($id))) return false;
+
+		try {
+			$filename = $this->data->get('filename');
+			$collectionName = $this->data->get('collection');
+
+			$item->getAttachmentStorage()->collections[$collectionName]->remove($filename);
+			return true;
+		} catch (\Throwable $e) {
+			$this->setStatusCode(self::VALIDATION_ERROR);
+			return false;
+		}
+	}
+
+
+	#[Route(Api::POST, '/attachment/upload/:id([0-9]+)')]
+	public function upload(int $id): bool {
+		/**
+		 * @var AttachmentableInterface $item
+		 * @var UploadedFile $file
+		 */
+
+		if (is_null($item = $this->getItem($id))) return false;
+
+		$collection = $this->post->get('collection');
+		$file = $this->post->get('file');
+
+		try {
+			$item->getAttachmentStorage()->collections[$collection]->addFile($file);
+			return true;
+		} catch (\Throwable $e) {
+			$this->setStatusCode(self::VALIDATION_ERROR);
+			return false;
+		}
+	}
+
+	#[Route(Api::POST, '/attachment/move-file/:id([0-9]+)')]
+	public function moveFile(int $id): bool|array {
+		/**
+		 * @var AttachmentableInterface $item
+		 */
+
+		if (is_null($item = $this->getItem($id))) return false;
+
+		$copy = $this->data->get('copy');
+		$filename = $this->data->get('filename');
+		$source = $this->data->get('source');
+		$target = $this->data->get('target');
+		$position = $this->data->get('position') + 1;
+
+		try {
+			if ($target !== $source) {
+				$item->getAttachmentStorage()->collections[$target]->add($filename);
+				if (!$copy) $item->getAttachmentStorage()->collections[$source]->remove($filename);
+			}
+			$item->getAttachmentStorage()->collections[$target]->get($filename);
+			$item->getAttachmentStorage()->collections[$target]->order($filename, $position);
+			return true;
+		} catch (FileException $e) {
+			$this->setStatusCode(self::VALIDATION_ERROR);
+			return ['messages' => ['Hiba']];
+		}
+	}
+
+	#endregion
+
 }

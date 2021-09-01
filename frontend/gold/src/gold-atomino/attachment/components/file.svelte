@@ -5,17 +5,18 @@
 	import Details from "./details-modal.svelte"
 
 	export let file;
+	export let removeFile:(filename)=>Promise<any>
+	export let saveFileDetails:(filename, data)=>Promise<any>;
 
 	$: icon = "far " + getClassNameForExtension(file.name.split('.').pop())
 
-	function details(){
-		console.log(file);
-		let modal = new Modal(Details, {file});
+	function showDetailsModal(){
+		let modal = new Modal(Details, {file, saveFileDetails:(data)=>saveFileDetails(file.name, data), removeFile:()=>removeFile(file.name)});
 		modal.open();
 	}
 </script>
 
-<div title="{file.name}" on:click={details} class="card is-inline-block m-1 is-unselectable has-background-grey" draggable="true">
+<div title="{file.name}" on:click={showDetailsModal} class="card is-inline-block m-1 is-unselectable has-background-grey" draggable="false">
 	<div class="card-image">
 		{#if file.isImage}
 			<figure class="image m-0 is-4by3" draggable="false">

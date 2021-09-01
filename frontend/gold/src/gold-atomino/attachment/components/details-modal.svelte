@@ -8,6 +8,8 @@
 
 	export let modal: Modal;
 	export let file;
+	export let saveFileDetails:(data:any)=>Promise<any>;
+	export let removeFile:()=>Promise<any>;
 
 	let properties = [];
 	let filename;
@@ -32,8 +34,12 @@
 		properties = [...properties];
 	}
 
-	function openImageModal(){
+	function showImageModal(){
 		(new Modal(ImageModal, {file, img})).open()
+	}
+
+	function remapProperties(){
+		return Object.fromEntries(properties.map(item => [item[0].trim(), item[1].trim()]));
 	}
 
 </script>
@@ -90,10 +96,10 @@
 
 		<footer class="modal-card-foot is-justify-content-center p-2">
 			{#if file.isImage}
-				<button class="button is-info is-size-7" on:click={()=>openImageModal()}><i class="fas fa-image"></i></button>
+				<button class="button is-info is-size-7" on:click={()=>showImageModal()}><i class="fas fa-image"></i>&nbsp;Image focus</button>
 			{/if}
-			<button class="button is-primary is-size-7"><i class="fas fa-save"></i></button>
-			<button class="button is-danger is-size-7"><i class="fas fa-trash"></i></button>
+			<button class="button is-primary is-size-7" on:click={()=>saveFileDetails({filename, title, focus: img.focus, safezone: img.safezone, properties: remapProperties()}).then(()=>modal.close())}><i class="fas fa-save"></i>&nbsp;Save</button>
+			<button class="button is-danger is-size-7" on:click={()=>removeFile().then(()=>modal.close())}><i class="fas fa-trash"></i>&nbsp;Delete</button>
 		</footer>
 	</div>
 </ModalComponent>
