@@ -7,11 +7,14 @@
 	export let file;
 	export let removeFile:(filename)=>Promise<any>
 	export let saveFileDetails:(filename, data)=>Promise<any>;
+	export let props:Array<string>;
+
+	let icon;
 
 	$: icon = "far " + getClassNameForExtension(file.name.split('.').pop())
 
 	function showDetailsModal(){
-		let modal = new Modal(Details, {file, saveFileDetails:(data)=>saveFileDetails(file.name, data), removeFile:()=>removeFile(file.name)});
+		let modal = new Modal(Details, {file, props, saveFileDetails:(data)=>saveFileDetails(file.name, data), removeFile:()=>removeFile(file.name)});
 		modal.open();
 	}
 </script>

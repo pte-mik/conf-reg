@@ -22,10 +22,10 @@
 		})
 	}
 
-	function saveFileDetails(filename: string, data: any) { return api.saveFileDetails(id, filename, data).then(load); }
-	function removeFile(collection: string, filename: string) { return api.removeFile(id, collection, filename).then(load); }
-	function upload(collection: string, files: FileList) {return api.upload(id, collection, files).then(load);}
-	function moveFile(filename: string, source: string, target: string, position: number, copy: boolean) {return api.moveFile(id, filename, source, target, position, copy).then(load)}
+	function saveFileDetails(filename: string, data: any) { return api.saveFileDetails(id, filename, data).finally(load); }
+	function removeFile(collection: string, filename: string) { return api.removeFile(id, collection, filename).finally(load); }
+	function upload(collection: string, files: FileList) {return api.upload(id, collection, files).finally(load);}
+	function moveFile(filename: string, source: string, target: string, position: number, copy: boolean) {return api.moveFile(id, filename, source, target, position, copy).finally(load)}
 
 	load();
 </script>
@@ -39,8 +39,8 @@
 		</header>
 		<section class="modal-card-body has-background-black-bis m-0 p-2">
 			{#await fetch}{:then r}
-				{#each Object.entries(visibleCollections) as [name, label]}
-					<Collection label={label} name={name} files={$files} collection={$collections[name]} saveFileDetails={saveFileDetails} removeFile={removeFile} upload={upload} moveFile={moveFile}/>
+				{#each Object.entries(visibleCollections) as [name, coll]}
+					<Collection label={coll.label} props={coll.props} name={name} files={$files} collection={$collections[name]} saveFileDetails={saveFileDetails} removeFile={removeFile} upload={upload} moveFile={moveFile}/>
 				{/each}
 			{/await}
 		</section>

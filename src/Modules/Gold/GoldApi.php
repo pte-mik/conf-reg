@@ -9,6 +9,7 @@ use Atomino\Carbon\ValidationError;
 use Atomino\Mercury\Responder\Api\Api;
 use Atomino\Mercury\Responder\Api\Attributes\Route;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use function Atomino\debug;
 
 class GoldApi extends Api {
 
@@ -30,12 +31,6 @@ class GoldApi extends Api {
 		$this->quicksearch = Gold::get($reflectionClass)->quicksearch;
 		$this->addViews();
 		$this->addSortings();
-	}
-
-	protected function getItem(int|null $id): Entity|null {
-		$item = ($this->entity)::pick($id);
-		if (is_null($item)) $this->setStatusCode(404);
-		return $item;
 	}
 
 	protected final function addView(GoldView $view): void { $this->views[$view->name] = $view; }
@@ -64,6 +59,11 @@ class GoldApi extends Api {
 		}
 	}
 
+	protected function getItem(int|null $id): Entity|null {
+		$item = ($this->entity)::pick($id);
+		if (is_null($item)) $this->setStatusCode(404);
+		return $item;
+	}
 	protected function listExport(Entity $item): array { return $item->export(); }
 	protected function formExport(Entity $item): array { return $item->export(); }
 	/** @throws ValidationError */
@@ -79,7 +79,7 @@ class GoldApi extends Api {
 	#region *** ITEM ENDPOINTS ***
 
 	#[Route("POST", '/create')]
-	public function create(): int {
+	public function create(): int|array {
 
 		$data = $this->data->get("item");
 		$item = ($this->entity)::create();
@@ -94,7 +94,7 @@ class GoldApi extends Api {
 	}
 
 	#[Route("POST", '/update/:id([0-9]+)')]
-	public function update(int $id): null|int {
+	public function update(int $id): null|int|array {
 		if (is_null($item = $this->getItem($id))) return null;
 
 		$data = $this->data->get("item");
@@ -286,7 +286,7 @@ class GoldApi extends Api {
 
 
 	#[Route(Api::POST, '/attachment/upload/:id([0-9]+)')]
-	public function upload(int $id): bool {
+	public function upload(int $id): bool|array {
 		/**
 		 * @var AttachmentableInterface $item
 		 * @var UploadedFile $file
@@ -295,14 +295,14 @@ class GoldApi extends Api {
 		if (is_null($item = $this->getItem($id))) return false;
 
 		$collection = $this->post->get('collection');
-		$file = $this->post->get('file');
+		$file = $this->files->get('file');
 
 		try {
 			$item->getAttachmentStorage()->collections[$collection]->addFile($file);
 			return true;
 		} catch (\Throwable $e) {
 			$this->setStatusCode(self::VALIDATION_ERROR);
-			return false;
+			return [['field'=>'attachment', 'message' => $e->getMessage()]];
 		}
 	}
 
@@ -330,7 +330,7 @@ class GoldApi extends Api {
 			return true;
 		} catch (FileException $e) {
 			$this->setStatusCode(self::VALIDATION_ERROR);
-			return ['messages' => ['Hiba']];
+			return [['field'=>'attachment', 'message' => $e->getMessage()]];
 		}
 	}
 

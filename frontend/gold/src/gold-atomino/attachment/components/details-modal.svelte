@@ -8,8 +8,9 @@
 
 	export let modal: Modal;
 	export let file;
-	export let saveFileDetails:(data:any)=>Promise<any>;
-	export let removeFile:()=>Promise<any>;
+	export let saveFileDetails: (data: any) => Promise<any>;
+	export let removeFile: () => Promise<any>;
+	export let props: Array<string>;
 
 	let properties = [];
 	let filename;
@@ -17,11 +18,14 @@
 	let img;
 
 	onMount(() => {
-		properties = ((typeof file.properties === "object") && !(file.properties instanceof Array)) ? [...Object.entries(file.properties)] : [];
+		for (let prop of props) if (typeof file.properties[prop] === 'undefined') file.properties[prop] = '';
+
+		properties = [...Object.entries(file.properties)];
 		console.log(properties)
+
 		filename = file.name;
 		title = file.title;
-		img = {focus:file.focus, safezone:file.safezone}
+		img = {focus: file.focus, safezone: file.safezone}
 	});
 
 
@@ -34,12 +38,14 @@
 		properties = [...properties];
 	}
 
-	function showImageModal(){
+	function showImageModal() {
 		(new Modal(ImageModal, {file, img})).open()
 	}
 
-	function remapProperties(){
-		return Object.fromEntries(properties.map(item => [item[0].trim(), item[1].trim()]));
+	function remapProperties() {
+		let remapped = Object.fromEntries(properties.map(item => [item[0].trim(), item[1].trim()]));
+		for(let key in remapped) if(key === '' && remapped.hasOwnProperty(key)) delete remapped[key];
+		return remapped;
 	}
 
 </script>

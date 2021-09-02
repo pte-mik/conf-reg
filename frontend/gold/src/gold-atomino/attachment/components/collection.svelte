@@ -8,6 +8,7 @@
 	export let files;
 	export let name: string = '';
 	export let label: string = '';
+	export let props:Array<string>;
 
 	const COLLID = 'x--collection--';
 
@@ -103,7 +104,7 @@
 						on:drop={(event)=>drop(index, event)}
 						on:dragleave={()=>over = null}
 				>
-					<File file={files[file]} saveFileDetails={saveFileDetails} removeFile={(filename)=>removeFile(name, filename)}/>
+					<File props={props} file={files[file]} saveFileDetails={saveFileDetails} removeFile={(filename)=>removeFile(name, filename)}/>
 				</div>
 			{/each}
 		</div>

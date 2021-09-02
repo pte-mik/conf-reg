@@ -25,7 +25,7 @@ import AttachmentApi from "gold-atomino/attachment/attachment-api";
 @button(buttons.save)
 @button(buttons.delete)
 @button(buttons.reload)
-@button(attachmentButton(new AttachmentApi('/gold/user'), {"avatar":"Avatar", images:"Képek"}))
+@button(attachmentButton(new AttachmentApi('/gold/user'), {"avatar":{label: "Avatar", props:['első', 'második']}, images:"Képek"}))
 
 export default class UserForm extends Form {
 
@@ -60,4 +60,3 @@ export default class UserForm extends Form {
 	}
 
 }
-
