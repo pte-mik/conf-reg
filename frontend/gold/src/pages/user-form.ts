@@ -1,22 +1,19 @@
-import attachmentButton from "gold-atomino/attachment/form-button";
-import ItemApi from "gold-entity/form/api";
-import CheckboxesInput from "gold-entity/form/components/input/checkboxes";
-import ColorInput from "gold-entity/form/components/input/color";
-import ComboboxInput from "gold-entity/form/components/input/combobox";
-import DateInput from "gold-entity/form/components/input/date";
-import DateTimeInput from "gold-entity/form/components/input/datetime";
-import NumberInput from "gold-entity/form/components/input/number";
-import PasswordInput from "gold-entity/form/components/input/password";
-import RadioInput from "gold-entity/form/components/input/radio";
-import SelectInput from "gold-entity/form/components/input/select";
-import StringInput from "gold-entity/form/components/input/string";
-import SwitchInput from "gold-entity/form/components/input/switch";
-import TextInput from "gold-entity/form/components/input/text";
-import TimeInput from "gold-entity/form/components/input/time";
-import Form, {button, buttons, form} from "gold-entity/form/form";
-import FaIcon from "gold/fa-icon";
-import UserList from "src/pages/user-list";
-import AttachmentApi from "gold-atomino/attachment/attachment-api";
+
+import AttachmentApi from "gold-attachment/lib/attachment-api";
+import attachmentButton from "gold-attachment/lib/form-button";
+import ItemApi from "gold-entity/lib/form/api";
+import CheckboxesInput from "gold-entity/lib/form/input/checkboxes";
+import ComboboxInput from "gold-entity/lib/form/input/combobox";
+import PasswordInput from "gold-entity/lib/form/input/password";
+import RadioInput from "gold-entity/lib/form/input/radio";
+import SelectInput from "gold-entity/lib/form/input/select";
+import StringInput from "gold-entity/lib/form/input/string";
+import SwitchInput from "gold-entity/lib/form/input/switch";
+import TextInput from "gold-entity/lib/form/input/text";
+import Form, {button, buttons, form} from "gold-entity/lib/form/form";
+import FaIcon from "gold/lib/fa-icon";
+import UserList from "./user-list";
+
 @form(
 	FaIcon.l("user"),
 	new ItemApi("/gold/user"),
@@ -32,7 +29,7 @@ export default class UserForm extends Form {
 	setTitle(item: any) { this.title = this.id === null ? "new user" : item.name;}
 
 	build() {
-		this.addSection("adatok", FaIcon.s('users'))
+		this.addSection("Alap adatok", FaIcon.s('users'))
 			.setRole("edit")
 			.addControl(new StringInput("name", "név").Layout("column"))
 			.addControl(new StringInput("email", "e-mail"))
@@ -44,7 +41,7 @@ export default class UserForm extends Form {
 			.addControl(new TextInput('text').Code())
 			.addControl(new TextInput('text'))
 
-		this.addSection("adatok", FaIcon.s('users'), ["is-full", "is-half-desktop"])
+		this.addSection("Kiegészítő adatok", FaIcon.s('users'), ["is-full", "is-half-desktop"])
 			.addControl(new StringInput("guid", "azonosít gu-id"))
 			// .addControl(new TextInput("guid", "azonosít gu-id"))
 			// .addControl(new TextInput("guid", "azonosít gu-id").Code())

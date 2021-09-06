@@ -13,7 +13,7 @@
     },
     "require": {
         "atomino/core": "dev-master",
-        "atomino/magic": "dev-master",
+        "atomino/gold": "dev-master",
         "atomino/bundle-created": "dev-master",
         "atomino/bundle-updated": "dev-master",
         "atomino/bundle-guid": "dev-master",

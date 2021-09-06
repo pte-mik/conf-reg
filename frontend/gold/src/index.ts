@@ -1,15 +1,15 @@
 // @ts-ignore
 import "./options";
-import FormPage from "gold-entity/form/form-page";
-import AuthApi from "gold/auth-api";
+import FormPage from "gold-entity/lib/form/form-page";
+import AuthApi from "gold/lib/auth-api";
 import App from "gold/components/app.svelte";
-import FaIcon from "gold/fa-icon";
-import ListManager from "gold/list-manager";
-import MenuItem from "gold/menu-item";
-import PageManager from "gold/page-manager";
-import UserForm from "src/pages/user-form";
-import UserList from "src/pages/user-list";
-import DashboardPage from "src/pages/dashboard-page";
+import FaIcon from "gold/lib/fa-icon";
+import ListManager from "gold/lib/list-manager";
+import MenuItem from "gold/lib/menu-item";
+import PageManager from "gold/lib/page-manager";
+import UserForm from "./pages/user-form";
+import UserList from "./pages/user-list";
+import DashboardPage from "./pages/dashboard-page";
 
 
 let pageManager = new PageManager();
@@ -27,8 +27,7 @@ let menu = [
 		new MenuItem("New user", FaIcon.s("user-plus"), () => {pageManager.add(new FormPage(new UserForm()))}),
 		new MenuItem("User 1", FaIcon.s("user"), () => {pageManager.add(new FormPage(new UserForm(1)))}),
 		new MenuItem("User non exists", FaIcon.s("user"), () => {pageManager.add(new FormPage(new UserForm(100)))})
-	], "editrrrt"),
+	]),
 ]
 
 window.addEventListener('load', () => new App({target: document.body, props: {pageManager, listManager, menu, authApi}}));
-

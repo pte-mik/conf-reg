@@ -1,8 +1,8 @@
 <?php namespace Application\Missions\Gold\Api;
 
 use Application\Entity\Event;
-use Application\Modules\Gold\Gold;
-use Application\Modules\Gold\GoldApi;
+use Atomino\Gold\Gold;
+use Atomino\Gold\GoldApi;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
 
@@ -20,4 +20,3 @@ class EventApi extends GoldApi {
 		return $item->name;
 	}
 }
-

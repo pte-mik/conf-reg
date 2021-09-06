@@ -1,7 +1,7 @@
-import Api from "gold-entity/list/api";
-import List, {button, list, buttons} from "gold-entity/list/list";
-import FaIcon from "gold/fa-icon";
-import UserForm from "src/pages/user-form";
+import Api from "gold-entity/lib/list/api";
+import List, {button, list, buttons} from "gold-entity/lib/list/list";
+import FaIcon from "gold/lib/fa-icon";
+import UserForm from "./user-form";
 
 @list(
 	"Felhasználók",

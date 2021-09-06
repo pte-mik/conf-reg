@@ -1,6 +1,7 @@
 {
 	"extends": "@tsconfig/svelte/tsconfig.json",
 	"compilerOptions": {
+
 		"types": ["svelte"],
 		"target": "ESNEXT",
 		"lib": [			"ESNEXT", "dom"],
@@ -19,10 +20,6 @@
 		"experimentalDecorators": true,
 		"paths": {
 			"src/*": ["src/*"],
-			"gold/*": ["src/gold/*"],
-			"gold-entity/*": ["src/gold-entity/*"],
-			"gold-atomino/*": ["src/gold-atomino/*"]
-		}
+		},
 	}
 }
-

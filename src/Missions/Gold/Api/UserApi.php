@@ -1,10 +1,10 @@
 <?php namespace Application\Missions\Gold\Api;
 
 use Application\Entity\User;
-use Application\Modules\Gold\Gold;
-use Application\Modules\Gold\GoldApi;
-use Application\Modules\Gold\GoldSorting;
-use Application\Modules\Gold\GoldView;
+use Atomino\Gold\Gold;
+use Atomino\Gold\GoldApi;
+use Atomino\Gold\GoldSorting;
+use Atomino\Gold\GoldView;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
 

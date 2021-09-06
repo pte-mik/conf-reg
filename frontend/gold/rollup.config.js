@@ -30,6 +30,7 @@ let env = {
 		out: production ? root + '/assets/public/~gold' : root + '/var/public/~gold',
 		fonts: root + '/assets/public/~fonts',
 		entry: cwd + '/src/index.ts',
+		nm: cwd + '/node_modules'
 	}
 }
 
@@ -54,9 +55,7 @@ let rollup = {
 				typescript(),
 				alias({
 					entries: [
-						{find: 'src', replacement: env.path.src},
-						{find: 'gold', replacement: env.path.src+'/gold'},
-						{find: 'gold-entity', replacement: env.path.src+'/gold-entity'},
+						{find: 'src', replacement: env.path.src}
 					]
 				}),
 				json(),

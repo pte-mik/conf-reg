@@ -18,9 +18,7 @@ use function DI\factory;
 
 
 return [
-	RateLimiterInterface::class => factory(fn(ApplicationConfig $cfg)=>new RateLimiter(
-		new FilesystemAdapter('',0, $cfg("mercury.ratelimiter.path"))
-	)),
+	RateLimiterInterface::class => factory(fn(ApplicationConfig $cfg) => new RateLimiter(new FilesystemAdapter('', 0, $cfg("mercury.ratelimiter.path")))),
 	Request::class              => factory(fn() => Request::createFromGlobals()),
 	SessionInterface::class     => factory(fn() => new Session(new NativeSessionStorage(["cookie_httponly" => true]))),
 	CacheInterface::class       => factory(fn(ApplicationConfig $cfg) => new FilesystemAdapter('', 60, $cfg("mercury.middlewares.cache.path"))),
