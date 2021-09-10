@@ -7,6 +7,8 @@ import FaIcon from "gold/lib/fa-icon";
 import ListManager from "gold/lib/list-manager";
 import MenuItem from "gold/lib/menu-item";
 import PageManager from "gold/lib/page-manager";
+import EventList from "src/pages/event-list";
+import SubmissionList from "src/pages/submission-list";
 import UserForm from "./pages/user-form";
 import UserList from "./pages/user-list";
 import DashboardPage from "./pages/dashboard-page";
@@ -18,16 +20,13 @@ let authApi = new AuthApi();
 
 pageManager.add(new DashboardPage());
 listManager.add(new UserList());
-pageManager.add(new FormPage(new UserForm(1)))
 
 let menu = [
-	new MenuItem("Dashboard", FaIcon.s("dice-d6"), () => {pageManager.add(new DashboardPage())}),
-	new MenuItem("User list", FaIcon.s("users"), () => {listManager.add(new UserList())}),
-	new MenuItem("User", FaIcon.s("users"), [
-		new MenuItem("New user", FaIcon.s("user-plus"), () => {pageManager.add(new FormPage(new UserForm()))}),
-		new MenuItem("User 1", FaIcon.s("user"), () => {pageManager.add(new FormPage(new UserForm(1)))}),
-		new MenuItem("User non exists", FaIcon.s("user"), () => {pageManager.add(new FormPage(new UserForm(100)))})
-	]),
+//	new MenuItem("Dashboard", FaIcon.s("dice-d6"), () => {pageManager.add(new DashboardPage())}),
+	new MenuItem("Users", FaIcon.s("users"), () => {listManager.add(new UserList())}),
+	new MenuItem("Events", FaIcon.s("calendar-alt"), () => {listManager.add(new EventList())}),
+	new MenuItem("Submissions", FaIcon.s("scroll"), () => {listManager.add(new SubmissionList())}),
+
 ]
 
 window.addEventListener('load', () => new App({target: document.body, props: {pageManager, listManager, menu, authApi}}));

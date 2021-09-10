@@ -8,15 +8,8 @@ use Atomino\Carbon\Entity;
 
 #[Gold(Event::class, 5, true)]
 class EventApi extends GoldApi {
-
-	protected function selectFilter(string $search):Filter|null{
-		return Filter::where(Event::name()->instring($search));
-	}
-	/**
-	 * @param Event $item
-	 * @return array
-	 */
-	protected function selectMap(Entity $item){
-		return $item->name;
+	protected function selectMap(Entity $item): string {
+		/** @var Event $item */
+		return $item->title;
 	}
 }

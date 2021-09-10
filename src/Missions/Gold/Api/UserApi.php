@@ -40,6 +40,9 @@ class UserApi extends GoldApi {
 		return $data;
 	}
 
+	protected function createItem(Entity $item, array $data): int|null {
+		return $this->updateItem($item, $data);
+	}
 	protected function updateItem(Entity $item, array $data):int|null {
 		/** @var User $item */
 		if ($data['password'] === "") unset($data['password']);

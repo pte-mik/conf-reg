@@ -17,7 +17,7 @@ class Api {
 	public submission = {
 		collect: () => fetch('/api/submission/get').then(res => res.json()),
 		get: (id: number) => fetch('/api/submission/get/' + id),
-		save: (submission: Submission) => post('/api/submission/', submission),
+		save: (submission: Submission) => post('/api/submission', submission),
 		create: (title: string, category: string) => post('/api/submission/create', {title, category}),
 		image: {
 			add: (id: number, file: File) => {

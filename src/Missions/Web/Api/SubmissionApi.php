@@ -78,6 +78,7 @@ class SubmissionApi extends Api {
 	#[Route(self::POST, '/')]
 	#[Auth]
 	public function save() {
+		debug('itt');
 		try {
 			$this->submissionService->modify(
 				$this->data->get('id'),

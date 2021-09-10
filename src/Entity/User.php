@@ -24,17 +24,11 @@ use Atomino\Carbon\ValidationError;
 #[Validator('name', \Symfony\Component\Validator\Constraints\Length::class, ['min' => 4])]
 #[Validator('password', \Symfony\Component\Validator\Constraints\Length::class, ['min' => 8])]
 #[Validator(null, UniqueEntity::class, ["fields"=>['email']])]
-#[Guid()]
 #[Created()]
 #[Updated()]
 #[Attachmentable()]
-#[AttachmentCollection(field: 'avatar', maxCount: 10, maxSize: 512 * 1024)]
-#[AttachmentCollection(field: 'images', maxSize: 512 * 1024, mimetype: "/image\/.*/")]
-#[AttachmentCollection(field: 'files', maxSize: 512 * 1024)]
 #[Authenticable('email')]
 #[Authorizable('group', ['user', 'moderate', 'edit'])]
-#[HasMany('events', Event::class, 'organizerId')]
-#[BelongsTo('boss', User::class, "bossId")]
 class User extends _User {
 
 	const GROUPS = [
@@ -49,9 +43,4 @@ class User extends _User {
 
 	public function hasParticipation(Event $event): bool { return !is_null($this->getParticipation($event)); }
 	public function getParticipation(Event $event): Participation|null { return Participation::search(Filter::where(Participation::eventId($event->id))->and(Participation::userId($this->id)))->pick(); }
-
-
-	public static function getBannedFilter(){
-	 return	Filter::where(User::id()->gt(20));
-	}
 }

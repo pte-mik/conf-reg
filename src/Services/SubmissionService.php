@@ -7,6 +7,7 @@ use Application\Exceptions\NotAuthorizedException;
 use Application\Exceptions\NotFoundException;
 use Atomino\Carbon\Database\Finder\Filter;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use function Atomino\debug;
 
 class SubmissionService {
 	/**

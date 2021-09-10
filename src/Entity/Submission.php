@@ -12,6 +12,8 @@ use Atomino\Carbon\Plugins\Attachment\AttachmentCollection;
 use Atomino\Carbon\Plugins\Created\Created;
 use Atomino\Carbon\Plugins\Updated\Updated;
 use Atomino\Carbon\ValidationError;
+use Symfony\Component\Validator\Constraints\ValidValidator;
+use Symfony\Component\Validator\Validation;
 
 #[Modelify(\Application\Database\DefaultConnection::class, 'submission', true)]
 #[Validator('title', \Symfony\Component\Validator\Constraints\Length::class, ["min" => 10])]
@@ -35,7 +37,7 @@ class Submission extends _Submission {
 	#[EventHandler(Entity::EVENT_BEFORE_INSERT, Entity::EVENT_BEFORE_UPDATE)]
 	public function beforeSave() {
 		if(!in_array($this->category, $this->event->categories)){
-			throw new ValidationError(["field"=>"category", "message"=>"Category not available"]);
+			throw new ValidationError([["field"=>"category", "message"=>"Category not available"]]);
 		}
 		$this->log[] = [
 			"date"   => date("Y-m-d H:i:m"),
