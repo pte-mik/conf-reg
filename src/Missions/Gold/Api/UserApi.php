@@ -47,7 +47,7 @@ class UserApi extends GoldApi {
 		/** @var User $item */
 		if ($data['password'] === "") unset($data['password']);
 		else $item->setPassword($data["password"]);
-		parent::updateItem($item, $data);
+		return parent::updateItem($item, $data);
 	}
 
 
