@@ -46,7 +46,6 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Validator("website", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("website", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("website", \Atomino\Carbon\Field\StringField::class)]
-#[Validator("participationRequired", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Field("participationRequired", \Atomino\Carbon\Field\BoolField::class)]
 abstract class _Event extends Entity {
 	static null|Model $model = null;
