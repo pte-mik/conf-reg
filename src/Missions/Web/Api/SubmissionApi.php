@@ -25,7 +25,7 @@ class SubmissionApi extends Api {
 		return $this->submissionService->collect($this->actualEventService->get(), $this->authenticator->get());
 	}
 
-	#[Route(self::POST, '/:id/image')]
+	#[Route(self::POST, '/:id/image/add')]
 	#[Auth]
 	public function imageAdd(int $id) {
 		$file = $this->files->get('file');
@@ -44,9 +44,10 @@ class SubmissionApi extends Api {
 		}
 	}
 
-	#[Route(self::DELETE, '/:id/image')]
+
+	#[Route(self::POST, '/:id/image/delete')]
 	#[Auth]
-	public function removeImage(int $id) {
+	public function removeImage(int $id): null|array {
 		try{
 			$this->submissionService->removeImage($id, $this->authenticator->get());
 		} catch (NotAuthorizedException $e) {
@@ -60,10 +61,27 @@ class SubmissionApi extends Api {
 			$this->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
 			return [["field"=>null, "message"=>$e->getMessage()]];
 		}
+		return null;
 	}
 
 
-	#[Route(self::DELETE, '/')]
+	#[Route(self::POST, '/submit')]
+	#[Auth]
+	public function submit(): array|null {
+		try {
+			$this->submissionService->submit($this->data->get('id'), $this->authenticator->get());
+		} catch (NotAuthorizedException $e) {
+			$this->setStatusCode(Response::HTTP_FORBIDDEN);
+		} catch (NotFoundException $e) {
+			$this->setStatusCode(Response::HTTP_NOT_FOUND);
+		} catch (ValidationError $e) {
+			$this->setStatusCode(self::VALIDATION_ERROR);
+			return ($e->getMessages());
+		}
+		return null;
+	}
+
+	#[Route(self::POST, '/delete')]
 	#[Auth]
 	public function delete(): void {
 		try {

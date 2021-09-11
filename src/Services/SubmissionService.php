@@ -10,6 +10,21 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use function Atomino\debug;
 
 class SubmissionService {
+
+	/**
+	 * @param $id
+	 * @param User $user
+	 * @throws NotAuthorizedException
+	 * @throws NotFoundException
+	 * @throws \Atomino\Carbon\ValidationError
+	 */
+	public function submit($id, User $user){
+		$submission = $this->pick($id, $user);
+		if($submission->event->organizerId !== $user->id && ($submission->status !== Submission::status__draft||$submission->event->deadline->getTimestamp() < time())) throw new NotAuthorizedException();
+		$submission->status = Submission::status__underReview;
+		$submission->save();
+	}
+
 	/**
 	 * @param $id
 	 * @param User $user

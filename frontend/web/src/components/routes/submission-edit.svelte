@@ -52,7 +52,10 @@
 		api.submission.save(submission)
 			.then(handleFetch)
 			.then(() => toast.success("Saved"))
-			.finally(() => { loading = false;})
+			.finally(() => {
+				loading = false;
+				route.submission.list();
+			})
 	}
 
 	function uploadImage(file: File) {
@@ -136,4 +139,3 @@
 		<p class="has-text-centered">Are you sure, you want to delete the image?</p>
 	</Confirm>
 {/await}
-

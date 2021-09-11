@@ -24,7 +24,7 @@ class AuthApi extends Api{
 	}
 
 	#[Route( self::POST, '/login' )]
-	#[Auth( false )]
+	#[Auth( 'admin' )]
 	public function login(){
 		$login = $this->data->get('login');
 		$password = $this->data->get('password');

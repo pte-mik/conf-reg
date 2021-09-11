@@ -4,12 +4,12 @@
 	import {status} from "src/entities/submission.ts";
 	import route from "src/services/route";
 	import {Button, Icon, Tooltip} from "svelma"
-	import {createEventDispatcher} from 'svelte';
 
-	const dispatch = createEventDispatcher();
 	let showDeleteConfirm: boolean = false;
 	let showSubmitToReview: boolean = false;
 	export let submission: Submission;
+	export let onDelete: Function;
+	export let onSubmit: Function;
 </script>
 
 <tr>
@@ -53,18 +53,16 @@
 				</Tooltip>
 			</p>
 		</div>
-		<Confirm bind:active={showDeleteConfirm} ok="Delete" okStyle="is-danger" on:ok={()=>dispatch('deleteSubmission')} title="Delete">
+
+		<Confirm bind:active={showDeleteConfirm} ok="Delete" okStyle="is-danger" on:ok={onDelete} title="Delete">
 			<p class="has-text-centered">Are you sure, you want to delete the submission?</p>
 			<p class="has-text-centered has-text-weight-bold">{submission.title}</p>
 		</Confirm>
 
-		<Confirm bind:active={showSubmitToReview} ok="Submit" on:ok={()=>dispatch('submitToReview')} title="Submit to review">
+		<Confirm bind:active={showSubmitToReview} ok="Submit" on:ok={onSubmit} title="Submit to review">
 			<p class="has-text-centered">Are you sure, you want to submit it to review?</p>
 			<p class="has-text-centered has-text-weight-bold">{submission.title}</p>
 			<p class="has-text-centered">After submiting the abstract to rewiew you can not delete or modify it.</p>
 		</Confirm>
 	</td>
 </tr>
-
-
-

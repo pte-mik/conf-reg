@@ -6,6 +6,7 @@
 			"ESNEXT",
 			"dom"
 		],
+		"experimentalDecorators": true,
 		"module": "ESNEXT",
 		"moduleResolution": "node",
 		"noImplicitAny": true,

@@ -7,7 +7,16 @@
 	import {fade} from 'svelte/transition'
 
 	let submissions: Array<Submission> = [];
-	let promise = api.submission.collect().then(res => submissions = res);
+	let promise;
+
+	function load() {
+		promise = api.submission.collect().then(res => submissions = res);
+	}
+
+	function onDelete(submission) { api.submission.delete(submission).then(load);}
+	function onSubmit(submission) { api.submission.submit(submission).then(load);}
+
+	load()
 </script>
 
 {#await promise then result}
@@ -28,7 +37,7 @@
 						</tr>
 						</thead>
 						{#each submissions as submission}
-							<SubmissionLine submission={submission}/>
+							<SubmissionLine submission={submission} onDelete={()=>onDelete(submission)} onSubmit={()=>onSubmit(submission)}/>
 						{/each}
 					</table>
 				</div>

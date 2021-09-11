@@ -18,22 +18,28 @@ class Api {
 		collect: () => fetch('/api/submission/get').then(res => res.json()),
 		get: (id: number) => fetch('/api/submission/get/' + id),
 		save: (submission: Submission) => post('/api/submission', submission),
+		submit: (submission: Submission) => post('/api/submission/submit', submission),
+		delete: (submission: Submission) => post('/api/submission/delete', submission),
 		create: (title: string, category: string) => post('/api/submission/create', {title, category}),
 		image: {
 			add: (id: number, file: File) => {
 				let data = new FormData()
 				data.append('file', file)
-				return fetch('/api/submission/' + id + '/image', {
+				return fetch('/api/submission/' + id + '/image/add', {
 					method: 'POST',
 					body: data
 				}).then(handleFetch);
 			},
 			remove: (id: number) => {
-				return fetch('/api/submission/' + id + '/image', {method: 'DELETE'});
+				return post('/api/submission/' + id + '/image/delete', null);
 			}
 		}
 	}
 }
 
+
 let api: Api = new Api();
+
+api.whoAmI();
+
 export default api;

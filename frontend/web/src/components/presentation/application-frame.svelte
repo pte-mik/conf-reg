@@ -32,7 +32,7 @@
 		<div class="navbar-start">
 			<a class="navbar-item is-size-7" target="_blank" href={$event.website}><span class="mr-1"><Icon pack="fas" icon="users"/></span> {$event.title}</a>
 			{#if ($user)}
-				<a class="navbar-item is-size-7" target="_blank" href on:click|preventDefault={route.profile}><span class="mr-1"><Icon pack="fas" icon="user"/></span>My profile</a>
+<!--				<a class="navbar-item is-size-7" target="_blank" href on:click|preventDefault={route.profile}><span class="mr-1"><Icon pack="fas" icon="user"/></span>My profile</a>-->
 				<a class="navbar-item is-size-7" target="_blank" href on:click|preventDefault={route.submission.list}><span class="mr-1"><Icon pack="fas" icon="file-powerpoint"/></span>My submissions</a>
 			{/if}
 		</div>
