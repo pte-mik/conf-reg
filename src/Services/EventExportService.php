@@ -34,7 +34,7 @@ class EventExportService {
 		$zip = $folder.'.zip';
 		chdir($folder);
 		exec('zip -r '.$zip.' ./');
-		array_map('unlink', glob("$folder/*.*"));
+		array_map('unlink', glob($folder."/*.*"));
 		rmdir($folder);
 		register_shutdown_function(fn()=>unlink($zip));
 		return $zip;
