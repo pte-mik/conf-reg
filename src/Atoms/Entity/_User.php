@@ -12,19 +12,19 @@ use Atomino\Carbon\Attributes\RequiredField;
 
 /**
  * @method static \Application\Atoms\EntityFinder\_User search( Filter $filter = null )
- * @method static \Atomino\Carbon\Database\Finder\Comparison id($isin = null)
- * @property-read int|null $id
  * @method static \Atomino\Carbon\Database\Finder\Comparison attachments($isin = null)
- * @method static \Atomino\Carbon\Database\Finder\Comparison group($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison created($isin = null)
  * @property-read \DateTime|null $created
- * @method static \Atomino\Carbon\Database\Finder\Comparison updated($isin = null)
- * @property-read \DateTime|null $updated
- * @method static \Atomino\Carbon\Database\Finder\Comparison name($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison email($isin = null)
+ * @method static \Atomino\Carbon\Database\Finder\Comparison group($isin = null)
+ * @method static \Atomino\Carbon\Database\Finder\Comparison id($isin = null)
+ * @property-read int|null $id
+ * @method static \Atomino\Carbon\Database\Finder\Comparison name($isin = null)
  * @method static \Atomino\Carbon\Database\Finder\Comparison password($isin = null)
  * @property-read string|null $password
  * @method static \Atomino\Carbon\Database\Finder\Comparison phone($isin = null)
+ * @method static \Atomino\Carbon\Database\Finder\Comparison updated($isin = null)
+ * @property-read \DateTime|null $updated
  */
 #[RequiredField('id', \Atomino\Carbon\Field\IntField::class)]
 #[Immutable("created", true)]
@@ -38,27 +38,27 @@ use Atomino\Carbon\Attributes\RequiredField;
 #[Protect("password", true, false)]
 #[RequiredField("email", \Atomino\Carbon\Field\StringField::class)]
 #[RequiredField("password", \Atomino\Carbon\Field\StringField::class)]
-#[Field("id", \Atomino\Carbon\Field\IntField::class)]
-#[Protect("id", true, false)]
-#[Immutable("id",false)]
 #[Validator("attachments", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Field("attachments", \Atomino\Carbon\Field\JsonField::class)]
-#[Validator("group", \Symfony\Component\Validator\Constraints\Choice::class, ['multiple'=>false,'choices'=>['admin','moderator','visitor']])]
-#[Field("group", \Atomino\Carbon\Field\EnumField::class, ['admin','moderator','visitor'])]
 #[Field("created", \Atomino\Carbon\Field\DateTimeField::class)]
-#[Validator("updated", \Symfony\Component\Validator\Constraints\NotNull::class)]
-#[Field("updated", \Atomino\Carbon\Field\DateTimeField::class)]
-#[Validator("name", \Symfony\Component\Validator\Constraints\NotNull::class)]
-#[Validator("name", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>16])]
-#[Field("name", \Atomino\Carbon\Field\StringField::class)]
 #[Validator("email", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("email", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("email", \Atomino\Carbon\Field\StringField::class)]
+#[Validator("group", \Symfony\Component\Validator\Constraints\Choice::class, ['multiple'=>false,'choices'=>['admin','moderator','visitor']])]
+#[Field("group", \Atomino\Carbon\Field\EnumField::class, ['admin','moderator','visitor'])]
+#[Field("id", \Atomino\Carbon\Field\IntField::class)]
+#[Protect("id", true, false)]
+#[Immutable("id",false)]
+#[Validator("name", \Symfony\Component\Validator\Constraints\NotNull::class)]
+#[Validator("name", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>16])]
+#[Field("name", \Atomino\Carbon\Field\StringField::class)]
 #[Validator("password", \Symfony\Component\Validator\Constraints\NotNull::class)]
 #[Validator("password", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>128])]
 #[Field("password", \Atomino\Carbon\Field\StringField::class)]
 #[Validator("phone", \Symfony\Component\Validator\Constraints\Length::class, ['max'=>255])]
 #[Field("phone", \Atomino\Carbon\Field\StringField::class)]
+#[Validator("updated", \Symfony\Component\Validator\Constraints\NotNull::class)]
+#[Field("updated", \Atomino\Carbon\Field\DateTimeField::class)]
 abstract class _User extends Entity implements \Atomino\Bundle\Attachment\AttachmentableInterface, \Atomino\Bundle\Authenticate\AuthenticableInterface, \Atomino\Bundle\Authorize\AuthorizableInterface{
 	static null|Model $model = null;
 	use \Atomino\Carbon\Plugins\Created\CreatedTrait;
@@ -69,31 +69,31 @@ abstract class _User extends Entity implements \Atomino\Bundle\Attachment\Attach
 	const ROLE_USER = "user";
 	const ROLE_MODERATE = "moderate";
 	const ROLE_EDIT = "edit";
-	const id = 'id';
-	protected int|null $id = null;
-	protected function getId():int|null{ return $this->id;}
 	const attachments = 'attachments';
 	protected array $attachments = [];
+	const created = 'created';
+	protected \DateTime|null $created = null;
+	protected function getCreated():\DateTime|null{ return $this->created;}
+	const email = 'email';
+	public string|null $email = null;
 	const group = 'group';
 	public string|null $group = null;
 	const group__admin = 'admin';
 	const group__moderator = 'moderator';
 	const group__visitor = 'visitor';
-	const created = 'created';
-	protected \DateTime|null $created = null;
-	protected function getCreated():\DateTime|null{ return $this->created;}
-	const updated = 'updated';
-	protected \DateTime|null $updated = null;
-	protected function getUpdated():\DateTime|null{ return $this->updated;}
+	const id = 'id';
+	protected int|null $id = null;
+	protected function getId():int|null{ return $this->id;}
 	const name = 'name';
 	public string|null $name = null;
-	const email = 'email';
-	public string|null $email = null;
 	const password = 'password';
 	protected string|null $password = null;
 	protected function getPassword():string|null{ return $this->password;}
 	const phone = 'phone';
 	public string|null $phone = null;
+	const updated = 'updated';
+	protected \DateTime|null $updated = null;
+	protected function getUpdated():\DateTime|null{ return $this->updated;}
 }
 
 

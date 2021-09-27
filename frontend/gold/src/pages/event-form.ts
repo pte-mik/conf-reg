@@ -26,6 +26,9 @@ import UserList from "./user-list";
 @button(buttons.save)
 @button(buttons.delete)
 @button(buttons.reload)
+@button(FaIcon.s('file-download'), (form:Form)=>{
+	window.open('/gold/event/download/' + form.id);
+})
 export default class EventForm extends Form {
 
 	setTitle(item: any) { this.title = this.id === null ? "new" : item.title;}
@@ -40,6 +43,7 @@ export default class EventForm extends Form {
 			.addControl(new DateTimeInput("deadline"))
 			.addControl(new DateTimeInput("regOpening"))
 			.addControl(new ComboboxInput("organizerId", "organizer").Api('/gold/user'))
+			.addControl(new TextInput("abstractTemplate", "template").Code())
 	}
 
 }

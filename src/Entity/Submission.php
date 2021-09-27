@@ -14,6 +14,7 @@ use Atomino\Carbon\Plugins\Updated\Updated;
 use Atomino\Carbon\ValidationError;
 use Symfony\Component\Validator\Constraints\ValidValidator;
 use Symfony\Component\Validator\Validation;
+use function Atomino\debug;
 
 #[Modelify(\Application\Database\DefaultConnection::class, 'submission', true)]
 #[Validator('title', \Symfony\Component\Validator\Constraints\Length::class, ["min" => 10])]
@@ -43,6 +44,43 @@ class Submission extends _Submission {
 			"date"   => date("Y-m-d H:i:m"),
 			"userid" => $this->authenticator->get()->id,
 			"status" => $this->status,
+		];
+	}
+
+	public function getTemplateData(){
+		$authors = $this->authors;
+		$affiliations = [];
+		foreach ($authors as $key => $author){
+			$first = trim($author['name']['first']);
+			$first = preg_replace("/\s\s+/", ' ', $first);
+			$first = explode(' ', $first);
+			$firstShort = '';
+			foreach ($first as $firstPart){
+				$firstShort .= strtoupper(substr($firstPart, 0, 1)).'. ';
+			}
+			$firstShort = trim($firstShort);
+
+			$authors[$key]['name']['firstShort'] = trim($firstShort);
+			if($author['institute']){
+				if(!in_array($author['institute'], $affiliations)){
+					$affiliations[] = $author['institute'];
+				}
+				$authors[$key]['index'] = array_search($author['institute'], $affiliations);
+			}
+		}
+
+		return [
+			'id'=>$this->id,
+			'title'=>$this->title,
+			'text'=>$this->text,
+			'keywords'=>$this->keywords,
+			'authors'=>$authors,
+			'affiliations'=>$affiliations,
+			'image'=> $this->image->count < 1 ? false : [
+				'caption' => $this->imageCaption,
+				'file'=>$this->image->first->filename,
+				'ext'=>pathinfo($this->image->first->filename, PATHINFO_EXTENSION)
+			]
 		];
 	}
 

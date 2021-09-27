@@ -7,7 +7,7 @@ use Atomino\Gold\GoldApi;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
 
-#[Gold(Submission::class, 5, true)]
+#[Gold(Submission::class, 50, true)]
 class SubmissionApi extends GoldApi {
 	protected function listExport(Entity $item): array {
 		/** @var Submission $item */

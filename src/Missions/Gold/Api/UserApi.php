@@ -8,13 +8,8 @@ use Atomino\Gold\GoldView;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
 
-#[Gold(User::class, 5, true)]
+#[Gold(User::class, 50, true)]
 class UserApi extends GoldApi {
-
-	protected function addViews(): void {
-		parent::addViews();
-		$this->addView(new GoldView('unba', '20nál kisebb', fn() => Filter::where(User::id()->lt(20))));
-	}
 
 	protected function quickSearch(string $search): Filter {
 		return Filter::where(User::name()->instring($search))
@@ -48,17 +43,6 @@ class UserApi extends GoldApi {
 		if ($data['password'] === "") unset($data['password']);
 		else $item->setPassword($data["password"]);
 		return parent::updateItem($item, $data);
-	}
-
-
-	#[GoldView('*', '-')]
-	protected function allView(): Filter|null {
-		return null;
-	}
-
-	#[GoldView('banned', '20nál nagyobb userek')]
-	protected function bannedView(): Filter|null {
-		return Filter::where(User::id()->gt(20));
 	}
 
 	#[GoldSorting('name', 'név')]
