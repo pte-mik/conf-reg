@@ -6,6 +6,8 @@ use Atomino\Gold\Gold;
 use Atomino\Gold\GoldApi;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Carbon\Entity;
+use Atomino\Gold\GoldSorting;
+use Atomino\Gold\GoldView;
 
 #[Gold(Submission::class, 50, true)]
 class SubmissionApi extends GoldApi {
@@ -15,4 +17,17 @@ class SubmissionApi extends GoldApi {
 		$data['userName'] = $item->user->name;
 		return $data;
 	}
+
+	public function addViews(): void {
+		parent::addViews();
+		$this->addView(new GoldView('all', 'all', fn() => null));
+		$this->addView(new GoldView('accepted', 'accepted', fn() => Filter::where(Submission::status(Submission::status__accepted))));
+		$this->addView(new GoldView('under-review', 'under review', fn() => Filter::where(Submission::status(Submission::status__underReview))));
+	}
+
+	public function addSortings(): void {
+		parent::addSortings();
+		$this->addSorting(new GoldSorting('title', 'title', fn(bool $asc)=> $asc ? [[Submission::title(), "asc"]] : [[Submission::title(), "desc"]]));
+	}
+
 }
