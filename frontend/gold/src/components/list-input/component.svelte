@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type ListInput from "list";
+	import type Control from "./control";
 
-	export let control: ListInput;
+	export let control: Control;
 	export let item;
 	export let onChange: Function;
 

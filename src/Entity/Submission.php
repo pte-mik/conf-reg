@@ -55,6 +55,9 @@ class Submission extends _Submission {
 			$first = preg_replace("/\s\s+/", ' ', $first);
 			$first = explode(' ', $first);
 			$firstShort = '';
+
+			$author['institute'] = trim($author['institute']);
+
 			foreach ($first as $firstPart){
 				$firstShort .= strtoupper(substr($firstPart, 0, 1)).'. ';
 			}

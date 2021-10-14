@@ -23,10 +23,11 @@ class EventExportService {
 		foreach ($submissions as $submission){
 			$data = $submission->getTemplateData();
 			$output = $template->render($data);
-			file_put_contents($folder.'/'.$submission->id.'.txt', $output);
+			mkdir($folder.'/'.$submission->category, 0777, true);
+			file_put_contents($folder.'/'.$submission->category.'/'.$submission->id.'.txt', $output);
 			if($submission->image->count){
 				$source = $submission->image->first->file->getRealPath();
-				$target = $folder.'/'.$submission->id.'.'.$data['image']['ext'];
+				$target = $folder.'/'.$submission->category.'/'.$submission->id.'.'.$data['image']['ext'];
 				copy($source, $target);
 			}
 		}
