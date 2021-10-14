@@ -16,6 +16,9 @@ import EventList from "src/pages/event-list";
 @button(FaIcon.s('file-download'), (form: Form) => {
 	window.open('/gold/event/download/' + form.id);
 })
+@button(FaIcon.s('id-card'), (form: Form) => {
+	window.open('/gold/event/users/' + form.id);
+})
 export default class EventForm extends Form {
 
 	setTitle(item: any) { this.title = this.id === null ? "new" : item.title;}

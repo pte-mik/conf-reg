@@ -18,7 +18,7 @@ let listManager = new ListManager();
 
 let authApi = new AuthApi('/gold/auth', () => {
 	listManager.add(new UserList());
-	pageManager.add(new FormPage(new SubmissionForm(14)))
+	// pageManager.add(new FormPage(new SubmissionForm(14)))
 });
 
 let menu = [

@@ -35,4 +35,16 @@ class EventApi extends GoldApi {
 		$response->send();
 		die();
 	}
+	#[Route("GET", '/users/:id')]
+	public function users($id){
+		$event = Event::pick($id);
+		$file = $this->eventExportService->exportUsers($event);
+		BinaryFileResponse::trustXSendfileTypeHeader();
+		$file = new File($file);
+		$response = new BinaryFileResponse($file);
+		$response->headers->set('Content-Disposition', $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $file->getFilename()));
+		if (is_array($mimetypes = (new MimeTypes())->getMimeTypes($file->getExtension())) && count($mimetypes)) $response->headers->set('Content-Type', $mimetypes[0]);
+		$response->send();
+		die();
+	}
 }
