@@ -30,8 +30,7 @@
         "ext-curl": "*",
         "ext-readline": "*",
         "ext-sockets": "*",
-        "symfony/rate-limiter": "^5.3",
-        "phpoffice/phpspreadsheet": "^1.18"
+        "symfony/rate-limiter": "^5.3"
     },
     "autoload": {
         "psr-4": {

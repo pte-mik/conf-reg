@@ -4,7 +4,7 @@ import controls from "gold-admin/form-input/controls";
 import Form, {button, buttons, form} from "gold-admin/form/form";
 import FormApi from "gold-admin/form/form-api";
 import EventList from "src/pages/event-list";
-
+import XLSX from "xlsx";
 @form(
 	FaIcon.s("calendar-alt"),
 	new FormApi("/gold/event"),
@@ -17,7 +17,22 @@ import EventList from "src/pages/event-list";
 	window.open('/gold/event/download/' + form.id);
 })
 @button(FaIcon.s('id-card'), (form: Form) => {
-	window.open('/gold/event/users/' + form.id);
+
+	fetch('/gold/event/users/'+form.id)
+		.then(res=>res.json())
+		.then((rows:Array<{name:string, email:string}>)=>{
+			let data:Array<any> = [];
+
+			rows.forEach(row => {
+				let rowData = [row.name, row.email];
+				data.push(rowData);
+			});
+
+			let book = XLSX.utils.book_new();
+			let sheet = XLSX.utils.aoa_to_sheet(data);
+			XLSX.utils.book_append_sheet(book, sheet, 'export');
+			XLSX.writeFile(book, 'users.xlsx');
+		})
 })
 export default class EventForm extends Form {
 

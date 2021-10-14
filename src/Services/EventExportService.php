@@ -7,8 +7,6 @@ use Application\Entity\User;
 use Atomino\Carbon\Database\Finder\Filter;
 use Atomino\Core\PathResolverInterface;
 use Twig\Loader\FilesystemLoader;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class EventExportService {
 
@@ -20,26 +18,10 @@ class EventExportService {
 		foreach ($submissions as $submission){
 			$users[$submission->userId] = $submission->user;
 		}
-
 		usort($users, function(User $a, User $b){
 			return strcmp($a->name, $b->name);
 		});
-
-		$spreadsheet = new Spreadsheet();
-		$sheet = $spreadsheet->getActiveSheet();
-
-		$index = 1;
-		foreach ($users as $user){
-			$sheet->setCellValue('A'.$index, $user->name);
-			$sheet->setCellValue('B'.$index, $user->email);
-			$index++;
-		}
-		$writer = new Xlsx($spreadsheet);
-		$folder = $this->pathResolver->path('var/tmp/export');
-		$file = $folder.'/users-'.time().'.xlsx';
-		$writer->save($file);
-		register_shutdown_function(fn()=>unlink($file));
-		return $file;
+		return array_map(fn(User $user)=>['name'=>$user->name, 'email'=>$user->email], $users);
 	}
 
 	public function export(Event $event):string{
