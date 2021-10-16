@@ -5,7 +5,7 @@ use Atomino\Mercury\Responder\Smart\SmartResponder;
 use Atomino\Mercury\Responder\Smart\Attributes\{Cache, Args, CSS, JS, Init};
 use Symfony\Component\HttpFoundation\Response;
 
-#[Init( 'web', 'index.twig', 'mobile.twig' )]
+#[Init( 'web', 'index.twig')]
 #[Args( title: 'Abstract Submission' )]
 #[JS('/~web/index.js')]
 #[CSS('/~web/index.css')]
@@ -19,4 +19,3 @@ class Index extends SmartResponder{
 		$this->smart['data']->set('event', $this->actualEventService->get());
 	}
 }
-
