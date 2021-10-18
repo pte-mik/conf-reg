@@ -13,7 +13,7 @@ class UserService {
 	public function forgotPassword($email) {
 		$user = User::search(Filter::where(User::email($email)))->pick();
 		if (!$user) return false;
-		mail($email, "Conference Ninja forgot password", "tönkrement a cucc? geccc!");
+		mail($email, "Conference Ninja forgot password", "Please contact the event administrator!");
 		return true;
 	}
 
